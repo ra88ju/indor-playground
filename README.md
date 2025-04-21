@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IndoorX Arena Website
+
+A modern, responsive website for an indoor sports arena built with Next.js and React.
+
+## Features
+
+- 🏟️ Modern and responsive design
+- 📱 Mobile-first approach
+- 🎯 Online booking system
+- 📸 Gallery showcase
+- 📅 Events and tournaments
+- 💼 Facility information
+- 📞 Contact form
+- 🌐 Social media integration
+
+## Tech Stack
+
+- Next.js 14
+- React 19
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- React Hook Form
+- React Icons
+- React Hot Toast
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18.0 or later
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/indoorx-arena.git
+cd indoorx-arena
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+indoorx-arena/
+├── app/
+│   ├── components/     # Reusable components
+│   ├── about/         # About page
+│   ├── booking/       # Booking page
+│   ├── contact/       # Contact page
+│   ├── events/        # Events page
+│   ├── facilities/    # Facilities page
+│   ├── gallery/       # Gallery page
+│   └── page.tsx       # Home page
+├── public/            # Static assets
+└── styles/           # Global styles
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Key Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Booking System
+- Online booking form for different sports
+- Date and time selection
+- Player count management
+- Payment integration (to be implemented)
 
-## Deploy on Vercel
+### Events Management
+- Upcoming tournaments
+- Special offers
+- Registration system
+- Event details and schedules
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Gallery
+- Photo gallery of facilities
+- Event photos
+- Training sessions
+- Community events
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Contact
+- Contact form
+- Location information
+- Business hours
+- Social media links
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Images from [Unsplash](https://unsplash.com)
+- Icons from [React Icons](https://react-icons.github.io/react-icons/)
+- UI components inspired by [Tailwind UI](https://tailwindui.com)
