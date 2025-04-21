@@ -21,7 +21,7 @@ const facilities = [
     title: "Cricket",
     description: "Full-size court with professional flooring and equipment",
     icon: "🏀",
-    image: "/facilities/basketball.jpg"
+    image: "/facilities/cricket.jpg"
   },
   
 ];
