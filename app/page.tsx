@@ -47,7 +47,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-4xl md:text-6xl font-bold mb-6"
           >
-            Welcome to Indoor Sports Arena
+            Welcome to Indoor Sports Ground 
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
