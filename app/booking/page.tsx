@@ -18,7 +18,7 @@ type FormData = {
 const sports = [
   { id: "badminton", name: "Badminton" },
   { id: "futsal", name: "Futsal" },
-  { id: "basketball", name: "Basketball" },
+  { id: "cricket", name: "Cricket" },
   { id: "table-tennis", name: "Table Tennis" },
 ];
 
@@ -29,7 +29,6 @@ export default function BookingPage() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      // Here you would typically send the data to your backend
       console.log(data);
       toast.success("Booking request submitted successfully!");
       reset();
@@ -41,29 +40,29 @@ export default function BookingPage() {
   };
 
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-20 bg-gray-900">
       <div className="container-custom py-12">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold text-center mb-8">Book Your Game</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <h1 className="text-3xl font-bold text-center mb-8 text-white">Book Your Game</h1>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-black p-8 rounded-xl border border-white/10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
                   Full Name
                 </label>
                 <input
                   type="text"
                   id="name"
                   {...register("name", { required: "Name is required" })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
                 />
                 {errors.name && (
-                  <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                  <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
                   Email
                 </label>
                 <input
@@ -76,36 +75,36 @@ export default function BookingPage() {
                       message: "Invalid email address",
                     },
                   })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                  <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="phone" className="block text-sm font-medium text-white mb-2">
                   Phone Number
                 </label>
                 <input
                   type="tel"
                   id="phone"
                   {...register("phone", { required: "Phone number is required" })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
                 />
                 {errors.phone && (
-                  <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+                  <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="sport" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="sport" className="block text-sm font-medium text-white mb-2">
                   Sport
                 </label>
                 <select
                   id="sport"
                   {...register("sport", { required: "Please select a sport" })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
                 >
                   <option value="">Select a sport</option>
                   {sports.map((sport) => (
@@ -115,42 +114,42 @@ export default function BookingPage() {
                   ))}
                 </select>
                 {errors.sport && (
-                  <p className="mt-1 text-sm text-red-600">{errors.sport.message}</p>
+                  <p className="mt-1 text-sm text-red-500">{errors.sport.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="date" className="block text-sm font-medium text-white mb-2">
                   Date
                 </label>
                 <input
                   type="date"
                   id="date"
                   {...register("date", { required: "Date is required" })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
                 />
                 {errors.date && (
-                  <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
+                  <p className="mt-1 text-sm text-red-500">{errors.date.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="time" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="time" className="block text-sm font-medium text-white mb-2">
                   Time
                 </label>
                 <input
                   type="time"
                   id="time"
                   {...register("time", { required: "Time is required" })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
                 />
                 {errors.time && (
-                  <p className="mt-1 text-sm text-red-600">{errors.time.message}</p>
+                  <p className="mt-1 text-sm text-red-500">{errors.time.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="players" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="players" className="block text-sm font-medium text-white mb-2">
                   Number of Players
                 </label>
                 <input
@@ -161,23 +160,23 @@ export default function BookingPage() {
                     required: "Number of players is required",
                     min: { value: 1, message: "Minimum 1 player required" },
                   })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
                 />
                 {errors.players && (
-                  <p className="mt-1 text-sm text-red-600">{errors.players.message}</p>
+                  <p className="mt-1 text-sm text-red-500">{errors.players.message}</p>
                 )}
               </div>
             </div>
 
             <div>
-              <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="notes" className="block text-sm font-medium text-white mb-2">
                 Additional Notes
               </label>
               <textarea
                 id="notes"
                 rows={4}
                 {...register("notes")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
 
