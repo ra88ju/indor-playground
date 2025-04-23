@@ -23,7 +23,7 @@ export default function Navigation() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5">
-              <span className="text-2xl font-bold text-blue-600">IndoorX Arena</span>
+              <span className="text-2xl font-bold text-blue-600">Indoor Park Rjshahi</span>
             </Link>
           </div>
           <div className="flex lg:hidden">
