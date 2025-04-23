@@ -58,19 +58,27 @@ const categories = ["All", "Events", "Sports", "Training", "Arena"];
 
 export default function GalleryPage() {
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-20 bg-gray-900">
       <div className="container-custom py-12">
-        <h1 className="text-4xl font-bold text-center mb-12">Gallery</h1>
+        <motion.h1 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-4xl font-bold text-center mb-12 text-white"
+        >
+          Gallery
+        </motion.h1>
 
         {/* Categories */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((category) => (
-            <button
+            <motion.button
               key={category}
-              className="px-6 py-2 rounded-full bg-gray-100 hover:bg-blue-600 hover:text-white transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-2 rounded-full bg-black text-white hover:bg-gray-800 transition-colors border border-white/10"
             >
               {category}
-            </button>
+            </motion.button>
           ))}
         </div>
 
@@ -82,7 +90,7 @@ export default function GalleryPage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative overflow-hidden rounded-lg shadow-lg"
+              className="group relative overflow-hidden rounded-xl bg-black"
             >
               <div className="relative h-64">
                 <Image
@@ -91,11 +99,13 @@ export default function GalleryPage() {
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300">
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-75 transition-all duration-300">
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="text-center text-white p-4">
-                      <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                      <p className="text-sm">{item.category}</p>
+                    <div className="text-center p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      <h3 className="text-xl font-semibold mb-2 text-white">{item.title}</h3>
+                      <span className="inline-block px-4 py-1 bg-blue-600 rounded-full text-sm text-white">
+                        {item.category}
+                      </span>
                     </div>
                   </div>
                 </div>
