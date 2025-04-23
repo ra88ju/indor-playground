@@ -34,7 +34,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/hero-bg.jpg"
-            alt="Indoor Sports Arena"
+            alt="Indoor Park Rajshahi"
             fill
             className="object-cover brightness-50"
             priority
