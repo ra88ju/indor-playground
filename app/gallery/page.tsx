@@ -58,24 +58,46 @@ const categories = ["All", "Events", "Sports", "Training", "Arena"];
 
 export default function GalleryPage() {
   return (
-    <main className="min-h-screen pt-20 bg-gray-900">
-      <div className="container-custom py-12">
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold text-center mb-12 text-white"
-        >
-          Gallery
-        </motion.h1>
+    <main className="min-h-screen bg-black">
+      {/* Header Section */}
+      <div className="relative h-[300px] w-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black z-10" />
+        <Image
+          src="/gallery/facility.jpg"
+          alt="Gallery Header"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="relative z-20 h-full flex flex-col items-center justify-center">
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl font-bold text-center text-white mb-4"
+          >
+            Our Gallery
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-300 text-lg text-center max-w-2xl px-4"
+          >
+            Explore our world-class facilities and vibrant community events
+          </motion.p>
+        </div>
+      </div>
 
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
         {/* Categories */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {categories.map((category) => (
             <motion.button
               key={category}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, backgroundColor: "#1a1a1a" }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-2 rounded-full bg-black text-white hover:bg-gray-800 transition-colors border border-white/10"
+              className="px-5 py-2 rounded-lg bg-gray-900 text-gray-200 border border-gray-800 text-sm font-medium
+                         transition-all duration-200 hover:border-gray-700"
             >
               {category}
             </motion.button>
@@ -83,27 +105,28 @@ export default function GalleryPage() {
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {galleryItems.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative overflow-hidden rounded-xl bg-black"
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="group relative overflow-hidden rounded-lg bg-gray-900"
             >
-              <div className="relative h-64">
+              <div className="relative aspect-[4/3]">
                 <Image
                   src={item.image}
                   alt={item.title}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="object-cover transition-all duration-300 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-75 transition-all duration-300">
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="text-center p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 className="text-xl font-semibold mb-2 text-white">{item.title}</h3>
-                      <span className="inline-block px-4 py-1 bg-blue-600 rounded-full text-sm text-white">
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center p-4 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                      <h3 className="text-lg font-semibold mb-2 text-white">{item.title}</h3>
+                      <span className="inline-block px-3 py-1 bg-blue-600/90 rounded-md text-sm text-white font-medium">
                         {item.category}
                       </span>
                     </div>
