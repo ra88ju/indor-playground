@@ -55,7 +55,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/about-hero.jpg"
-            alt="IndoorX Arena"
+            alt="Indoor park"
             fill
             className="object-cover brightness-50"
             priority
