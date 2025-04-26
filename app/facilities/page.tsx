@@ -56,6 +56,20 @@ const facilities = [
     pricing: "From $15/hour",
     image: "/facilities/table-tennis.jpg",
   },
+  {
+    id: "kids-zone",
+    name: "Kids Play Zone",
+    description: "A safe and fun environment for children with various activities and games. Supervised play area with trained staff.",
+    features: [
+      "Soft Play Area",
+      "Ball Pit",
+      "Climbing Structures",
+      "Supervised Activities",
+      "Safe Environment",
+    ],
+    pricing: "From $10/hour",
+    image: "/facilities/kids-zone.jpg",
+  },
 ];
 
 export default function FacilitiesPage() {
@@ -69,38 +83,46 @@ export default function FacilitiesPage() {
               key={facility.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.2 }
+              }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-lg shadow-lg overflow-hidden"
+              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
-              <div className="relative h-64">
+              <div className="relative h-72">
                 <Image
                   src={facility.image}
                   alt={facility.name}
                   fill
-                  className="object-cover"
+                  className="object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <div className="p-6">
+              <div className="p-6 min-h-[280px] flex flex-col">
                 <h2 className="text-2xl font-bold mb-2">{facility.name}</h2>
-                <p className="text-gray-600 mb-4">{facility.description}</p>
+                <p className="text-gray-600 mb-4 flex-grow">{facility.description}</p>
                 <div className="mb-4">
                   <h3 className="font-semibold mb-2">Features:</h3>
                   <ul className="list-disc list-inside text-gray-600">
                     {facility.features.map((feature) => (
-                      <li key={feature}>{feature}</li>
+                      <li key={feature} className="hover:text-blue-600 transition-colors duration-200">
+                        {feature}
+                      </li>
                     ))}
                   </ul>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mt-auto">
                   <span className="text-lg font-semibold text-blue-600">
                     {facility.pricing}
                   </span>
-                  <a
+                  <motion.a
                     href="/booking"
                     className="btn-primary text-sm"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Book Now
-                  </a>
+                  </motion.a>
                 </div>
               </div>
             </motion.div>
