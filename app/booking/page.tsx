@@ -17,7 +17,7 @@ type FormData = {
 
 const sports = [
   { id: "badminton", name: "Badminton" },
-  { id: "futsal", name: "Futsal" },
+  { id: "futsal", name: "Footbal" },
   { id: "cricket", name: "Cricket" },
   { id: "table-tennis", name: "Table Tennis" },
 ];
