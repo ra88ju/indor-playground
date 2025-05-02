@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Facility {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  pricePerHour Float
+  features    String[]
+  image       String
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Booking {
+  id            String   @id @default(cuid())
+  facilityId    String
+  facility      Facility @relation(fields: [facilityId], references: [id])
+  date          DateTime
+  timeSlot      String
+  userId        String?  // Optional if you want to implement user authentication
+  customerName  String?
+  customerEmail String?
+  customerPhone String?
+  paymentMethod String
+  paymentStatus String   @default("pending") // pending, completed, failed
+  amount        Float
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([facilityId, date, timeSlot]) // Ensure no double bookings
+} 

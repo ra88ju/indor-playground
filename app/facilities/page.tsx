@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import BookingDrawer from "../components/BookingDrawer";
 
 const facilities = [
   {
@@ -73,6 +75,14 @@ const facilities = [
 ];
 
 export default function FacilitiesPage() {
+  const [selectedFacility, setSelectedFacility] = useState<any>(null);
+  const [isBookingDrawerOpen, setIsBookingDrawerOpen] = useState(false);
+
+  const handleBookNowClick = (facility: any) => {
+    setSelectedFacility(facility);
+    setIsBookingDrawerOpen(true);
+  };
+
   return (
     <main className="min-h-screen pt-20">
       <div className="container-custom py-12">
@@ -115,20 +125,30 @@ export default function FacilitiesPage() {
                   <span className="text-lg font-semibold text-blue-600">
                     {facility.pricing}
                   </span>
-                  <motion.a
-                    href="/booking"
+                  <motion.button
+                    onClick={() => handleBookNowClick(facility)}
                     className="btn-primary text-sm"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     Book Now
-                  </motion.a>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {selectedFacility && (
+        <BookingDrawer
+          isOpen={isBookingDrawerOpen}
+          onClose={() => setIsBookingDrawerOpen(false)}
+          facilityId={selectedFacility.id}
+          facilityName={selectedFacility.name}
+          pricePerHour={selectedFacility.pricing}
+        />
+      )}
     </main>
   );
 } 
