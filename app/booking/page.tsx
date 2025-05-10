@@ -23,9 +23,15 @@ const sports = [
   { id: "table-tennis", name: "Table Tennis" },
 ];
 
+const paymentMethods = [
+  { value: "credit-card", label: "Credit Card", icon: "💳" },
+  { value: "paypal", label: "PayPal", icon: "🅿️" },
+  { value: "cash", label: "Cash", icon: "💵" },
+];
+
 export default function BookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -172,16 +178,29 @@ export default function BookingPage() {
                 <label htmlFor="paymentMethod" className="block text-sm font-medium text-white mb-2">
                   Payment Method
                 </label>
-                <select
-                  id="paymentMethod"
-                  {...register("paymentMethod", { required: "Please select a payment method" })}
-                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <option value="">Select Payment Method</option>
-                  <option value="credit-card">Credit Card</option>
-                  <option value="paypal">PayPal</option>
-                  <option value="cash">Cash</option>
-                </select>
+                <div className="flex flex-col md:flex-row gap-4">
+                  {paymentMethods.map((method) => (
+                    <label
+                      key={method.value}
+                      className={`flex items-center gap-2 p-4 rounded-lg cursor-pointer border transition-all duration-200 w-full md:w-auto
+                        ${
+                          (watch('paymentMethod') === method.value)
+                            ? 'bg-blue-900 border-blue-500 shadow-lg scale-105' 
+                            : 'bg-gray-900 border-gray-700 hover:border-blue-400'
+                        }
+                      `}
+                    >
+                      <input
+                        type="radio"
+                        value={method.value}
+                        {...register("paymentMethod", { required: "Please select a payment method" })}
+                        className="hidden"
+                      />
+                      <span className="text-2xl">{method.icon}</span>
+                      <span className="font-semibold text-white">{method.label}</span>
+                    </label>
+                  ))}
+                </div>
                 {errors.paymentMethod && (
                   <p className="mt-1 text-sm text-red-500">{errors.paymentMethod.message}</p>
                 )}
