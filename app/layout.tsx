@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "IndoorX Arena - Your Ultimate Indoor Sports Experience",
+  title: "Indoor Park Rajshahi",
   description: "Welcome to IndoorX Arena, your premier destination for indoor sports and recreation. Book your game now!",
 };
 
