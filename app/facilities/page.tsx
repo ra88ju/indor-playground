@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import BookingDrawer from "../components/BookingDrawer";
 
 const facilities = [
   {
@@ -141,13 +140,7 @@ export default function FacilitiesPage() {
       </div>
 
       {selectedFacility && (
-        <BookingDrawer
-          isOpen={isBookingDrawerOpen}
-          onClose={() => setIsBookingDrawerOpen(false)}
-          facilityId={selectedFacility.id}
-          facilityName={selectedFacility.name}
-          pricePerHour={selectedFacility.pricing}
-        />
+        null
       )}
     </main>
   );
