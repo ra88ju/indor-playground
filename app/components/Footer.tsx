@@ -42,7 +42,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand Section */}
           <div>
-            <h2 className="text-2xl font-bold mb-4">IndoorX Arena</h2>
+            <h2 className="text-2xl font-bold mb-4">Indoor park </h2>
             <p className="text-gray-400 mb-4">
               Your premier destination for indoor sports and recreation. Join our community
               and experience the best in sports facilities.
@@ -92,7 +92,7 @@ export default function Footer() {
 
         <div className="mt-8 pt-8 border-t border-gray-800">
           <p className="text-center text-gray-400">
-            © {new Date().getFullYear()} IndoorX Arena. All rights reserved.
+            © {new Date().getFullYear()} Indoor park rajshahi. All rights reserved.
           </p>
         </div>
       </div>

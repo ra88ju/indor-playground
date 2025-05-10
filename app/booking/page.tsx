@@ -47,11 +47,11 @@ export default function BookingPage() {
   };
 
   return (
-    <main className="min-h-screen pt-20 bg-gray-900">
+    <main className="min-h-screen pt-20 bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
       <div className="container-custom py-12">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold text-center mb-8 text-white">Book Your Game</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-gray p-8 rounded-xl border border-white/10">
+          <h1 className="text-3xl font-bold text-center mb-8 text-white drop-shadow-lg animate-fade-in">Book Your Game</h1>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 shadow-2xl animate-fade-in-up">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
@@ -61,7 +61,7 @@ export default function BookingPage() {
                   type="text"
                   id="name"
                   {...register("name", { required: "Name is required" })}
-                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
                 />
                 {errors.name && (
                   <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
@@ -82,7 +82,7 @@ export default function BookingPage() {
                       message: "Invalid email address",
                     },
                   })}
-                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
                 />
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
@@ -97,7 +97,7 @@ export default function BookingPage() {
                   type="tel"
                   id="phone"
                   {...register("phone", { required: "Phone number is required" })}
-                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
                 />
                 {errors.phone && (
                   <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>
@@ -111,7 +111,7 @@ export default function BookingPage() {
                 <select
                   id="sport"
                   {...register("sport", { required: "Please select a sport" })}
-                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
                 >
                   <option value="">Select a sport</option>
                   {sports.map((sport) => (
@@ -133,7 +133,7 @@ export default function BookingPage() {
                   type="date"
                   id="date"
                   {...register("date", { required: "Date is required" })}
-                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
                 />
                 {errors.date && (
                   <p className="mt-1 text-sm text-red-500">{errors.date.message}</p>
@@ -148,7 +148,7 @@ export default function BookingPage() {
                   type="time"
                   id="time"
                   {...register("time", { required: "Time is required" })}
-                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
                 />
                 {errors.time && (
                   <p className="mt-1 text-sm text-red-500">{errors.time.message}</p>
@@ -167,7 +167,7 @@ export default function BookingPage() {
                     required: "Number of players is required",
                     min: { value: 1, message: "Minimum 1 player required" },
                   })}
-                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
                 />
                 {errors.players && (
                   <p className="mt-1 text-sm text-red-500">{errors.players.message}</p>
@@ -186,7 +186,7 @@ export default function BookingPage() {
                         ${
                           (watch('paymentMethod') === method.value)
                             ? 'bg-blue-900 border-blue-500 shadow-lg scale-105' 
-                            : 'bg-gray-900 border-gray-700 hover:border-blue-400'
+                            : 'bg-gray-900 border-gray-700 hover:border-blue-400 hover:shadow-lg'
                         }
                       `}
                     >
@@ -215,7 +215,7 @@ export default function BookingPage() {
                 id="notes"
                 rows={4}
                 {...register("notes")}
-                className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
               />
             </div>
 
