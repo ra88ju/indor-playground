@@ -167,6 +167,25 @@ export default function BookingPage() {
                   <p className="mt-1 text-sm text-red-500">{errors.players.message}</p>
                 )}
               </div>
+
+              <div>
+                <label htmlFor="paymentMethod" className="block text-sm font-medium text-white mb-2">
+                  Payment Method
+                </label>
+                <select
+                  id="paymentMethod"
+                  {...register("paymentMethod", { required: "Please select a payment method" })}
+                  className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                >
+                  <option value="">Select Payment Method</option>
+                  <option value="credit-card">Credit Card</option>
+                  <option value="paypal">PayPal</option>
+                  <option value="cash">Cash</option>
+                </select>
+                {errors.paymentMethod && (
+                  <p className="mt-1 text-sm text-red-500">{errors.paymentMethod.message}</p>
+                )}
+              </div>
             </div>
 
             <div>
@@ -179,25 +198,6 @@ export default function BookingPage() {
                 {...register("notes")}
                 className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
               />
-            </div>
-
-            <div>
-              <label htmlFor="paymentMethod" className="block text-sm font-medium text-white mb-2">
-                Payment Method
-              </label>
-              <select
-                id="paymentMethod"
-                {...register("paymentMethod", { required: "Please select a payment method" })}
-                className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option value="">Select Payment Method</option>
-                <option value="credit-card">Credit Card</option>
-                <option value="paypal">PayPal</option>
-                <option value="cash">Cash</option>
-              </select>
-              {errors.paymentMethod && (
-                <p className="mt-1 text-sm text-red-500">{errors.paymentMethod.message}</p>
-              )}
             </div>
 
             <div className="flex justify-center">
