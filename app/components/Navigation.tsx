@@ -18,7 +18,7 @@ export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
+    <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm">
       <nav className="container-custom mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
         <div className="flex h-16 items-center justify-between">
           <div className="flex lg:flex-1">
