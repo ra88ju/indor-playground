@@ -412,7 +412,7 @@ export default function Navigation() {
           <div className="relative bg-white rounded-xl shadow-2xl p-8 w-full max-w-2xl z-10 animate-fade-in-up">
             {/* Back Button */}
             <button
-              className="absolute top-4 left-4 text-gray-500 hover:text-blue-600 text-lg font-bold border border-gray-300 rounded px-3 py-1 bg-white shadow"
+              className="absolute top-4 left-4 text-black-500 hover:text-blue-600 text-lg font-bold border border-gray-300 rounded px-3 py-1 bg-white shadow"
               onClick={() => setSlotModalOpen(false)}
             >
               ← Back
