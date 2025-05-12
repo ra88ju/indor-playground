@@ -23,10 +23,22 @@ const restaurantItems = [
   { name: "Offers", href: "/resturents/offers" },
 ];
 
+const banglaFoodItems = [
+  { name: "Bhuna Khichuri", href: "/resturents/menu/bangla/bhuna-khichuri" },
+  { name: "Panta Ilish", href: "/resturents/menu/bangla/panta-ilish" },
+  { name: "Morog Polao", href: "/resturents/menu/bangla/morog-polao" },
+];
+const chineseFoodItems = [
+  { name: "Fried Rice", href: "/resturents/menu/chinese/fried-rice" },
+  { name: "Chicken Chow Mein", href: "/resturents/menu/chinese/chow-mein" },
+  { name: "Spring Roll", href: "/resturents/menu/chinese/spring-roll" },
+];
+
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
   const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
+  const [foodSubmenuOpen, setFoodSubmenuOpen] = useState("");
 
   return (
     <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm py-2">
@@ -54,7 +66,7 @@ export default function Navigation() {
                   key={item.name}
                   className="relative group"
                   onMouseEnter={() => setRestaurantDropdownOpen(true)}
-                  onMouseLeave={() => { setRestaurantDropdownOpen(false); setMenuDropdownOpen(false); }}
+                  onMouseLeave={() => { setRestaurantDropdownOpen(false); setMenuDropdownOpen(false); setFoodSubmenuOpen(""); }}
                 >
                   <button
                     className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1"
@@ -70,26 +82,66 @@ export default function Navigation() {
                             key={sub.name}
                             className="relative group"
                             onMouseEnter={() => setMenuDropdownOpen(true)}
-                            onMouseLeave={() => setMenuDropdownOpen(false)}
+                            onMouseLeave={() => { setMenuDropdownOpen(false); setFoodSubmenuOpen(""); }}
                           >
                             <a
                               href={sub.href}
                               className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center justify-between"
+                              onMouseEnter={() => setMenuDropdownOpen(true)}
                             >
                               {sub.name}
                               <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                             </a>
                             {menuDropdownOpen && (
-                              <div className="absolute left-full top-0 ml-1 w-40 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
-                                {sub.submenu.map((item) => (
-                                  <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                                  >
-                                    {item.name}
-                                  </a>
-                                ))}
+                              <div className="absolute left-full top-0 ml-1 w-44 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
+                                {/* Bangla Food */}
+                                <button
+                                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center justify-between"
+                                  onMouseEnter={() => setFoodSubmenuOpen("bangla")}
+                                  onMouseLeave={() => setFoodSubmenuOpen("")}
+                                  onClick={() => setFoodSubmenuOpen(foodSubmenuOpen === "bangla" ? "" : "bangla")}
+                                  type="button"
+                                >
+                                  Bangla Food
+                                  <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                </button>
+                                {foodSubmenuOpen === "bangla" && (
+                                  <div className="absolute left-full top-0 ml-1 w-44 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
+                                    {banglaFoodItems.map((item) => (
+                                      <a
+                                        key={item.name}
+                                        href={item.href}
+                                        className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                      >
+                                        {item.name}
+                                      </a>
+                                    ))}
+                                  </div>
+                                )}
+                                {/* Chinese Food */}
+                                <button
+                                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center justify-between"
+                                  onMouseEnter={() => setFoodSubmenuOpen("chinese")}
+                                  onMouseLeave={() => setFoodSubmenuOpen("")}
+                                  onClick={() => setFoodSubmenuOpen(foodSubmenuOpen === "chinese" ? "" : "chinese")}
+                                  type="button"
+                                >
+                                  Chinese Food
+                                  <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                </button>
+                                {foodSubmenuOpen === "chinese" && (
+                                  <div className="absolute left-full top-0 ml-1 w-44 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
+                                    {chineseFoodItems.map((item) => (
+                                      <a
+                                        key={item.name}
+                                        href={item.href}
+                                        className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                      >
+                                        {item.name}
+                                      </a>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>
@@ -172,16 +224,50 @@ export default function Navigation() {
                                   </button>
                                   {menuDropdownOpen && (
                                     <div className="pl-4">
-                                      {sub.submenu.map((item) => (
-                                        <Link
-                                          key={item.name}
-                                          href={item.href}
-                                          className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                                          onClick={() => setMobileMenuOpen(false)}
-                                        >
-                                          {item.name}
-                                        </Link>
-                                      ))}
+                                      <button
+                                        className="w-full flex items-center justify-between rounded-lg px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                        onClick={() => setFoodSubmenuOpen(foodSubmenuOpen === "bangla" ? "" : "bangla")}
+                                        type="button"
+                                      >
+                                        Bangla Food
+                                        <svg className={`w-3 h-3 ml-2 transition-transform ${foodSubmenuOpen === "bangla" ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                      </button>
+                                      {foodSubmenuOpen === "bangla" && (
+                                        <div className="pl-4">
+                                          {banglaFoodItems.map((item) => (
+                                            <Link
+                                              key={item.name}
+                                              href={item.href}
+                                              className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                              onClick={() => setMobileMenuOpen(false)}
+                                            >
+                                              {item.name}
+                                            </Link>
+                                          ))}
+                                        </div>
+                                      )}
+                                      <button
+                                        className="w-full flex items-center justify-between rounded-lg px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                        onClick={() => setFoodSubmenuOpen(foodSubmenuOpen === "chinese" ? "" : "chinese")}
+                                        type="button"
+                                      >
+                                        Chinese Food
+                                        <svg className={`w-3 h-3 ml-2 transition-transform ${foodSubmenuOpen === "chinese" ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                      </button>
+                                      {foodSubmenuOpen === "chinese" && (
+                                        <div className="pl-4">
+                                          {chineseFoodItems.map((item) => (
+                                            <Link
+                                              key={item.name}
+                                              href={item.href}
+                                              className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                              onClick={() => setMobileMenuOpen(false)}
+                                            >
+                                              {item.name}
+                                            </Link>
+                                          ))}
+                                        </div>
+                                      )}
                                     </div>
                                   )}
                                 </div>
