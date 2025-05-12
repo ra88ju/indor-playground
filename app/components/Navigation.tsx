@@ -15,7 +15,10 @@ const navigation = [
 ];
 
 const restaurantItems = [
-  { name: "Menu", href: "/resturents/menu" },
+  { name: "Menu", href: "/resturents/menu", submenu: [
+    { name: "Bangla Food", href: "/resturents/menu/bangla" },
+    { name: "Chinese Food", href: "/resturents/menu/chinese" },
+  ] },
   { name: "Book Table", href: "/resturents/book-table" },
   { name: "Offers", href: "/resturents/offers" },
 ];
@@ -23,6 +26,7 @@ const restaurantItems = [
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
+  const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
 
   return (
     <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm py-2">
@@ -50,7 +54,7 @@ export default function Navigation() {
                   key={item.name}
                   className="relative group"
                   onMouseEnter={() => setRestaurantDropdownOpen(true)}
-                  onMouseLeave={() => setRestaurantDropdownOpen(false)}
+                  onMouseLeave={() => { setRestaurantDropdownOpen(false); setMenuDropdownOpen(false); }}
                 >
                   <button
                     className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1"
@@ -59,16 +63,46 @@ export default function Navigation() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   {restaurantDropdownOpen && (
-                    <div className="absolute left-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
-                      {restaurantItems.map((sub) => (
-                        <a
-                          key={sub.name}
-                          href={sub.href}
-                          className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                        >
-                          {sub.name}
-                        </a>
-                      ))}
+                    <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
+                      {restaurantItems.map((sub) =>
+                        sub.submenu ? (
+                          <div
+                            key={sub.name}
+                            className="relative group"
+                            onMouseEnter={() => setMenuDropdownOpen(true)}
+                            onMouseLeave={() => setMenuDropdownOpen(false)}
+                          >
+                            <a
+                              href={sub.href}
+                              className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center justify-between"
+                            >
+                              {sub.name}
+                              <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                            </a>
+                            {menuDropdownOpen && (
+                              <div className="absolute left-full top-0 ml-1 w-40 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
+                                {sub.submenu.map((item) => (
+                                  <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                  >
+                                    {item.name}
+                                  </a>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <a
+                            key={sub.name}
+                            href={sub.href}
+                            className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          >
+                            {sub.name}
+                          </a>
+                        )
+                      )}
                     </div>
                   )}
                 </div>
@@ -125,16 +159,43 @@ export default function Navigation() {
                         </button>
                         {restaurantDropdownOpen && (
                           <div className="pl-4">
-                            {restaurantItems.map((sub) => (
-                              <Link
-                                key={sub.name}
-                                href={sub.href}
-                                className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                                onClick={() => setMobileMenuOpen(false)}
-                              >
-                                {sub.name}
-                              </Link>
-                            ))}
+                            {restaurantItems.map((sub) =>
+                              sub.submenu ? (
+                                <div key={sub.name}>
+                                  <button
+                                    className="w-full flex items-center justify-between rounded-lg px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                    onClick={() => setMenuDropdownOpen(!menuDropdownOpen)}
+                                    type="button"
+                                  >
+                                    {sub.name}
+                                    <svg className={`w-3 h-3 ml-2 transition-transform ${menuDropdownOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                  </button>
+                                  {menuDropdownOpen && (
+                                    <div className="pl-4">
+                                      {sub.submenu.map((item) => (
+                                        <Link
+                                          key={item.name}
+                                          href={item.href}
+                                          className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                          onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                          {item.name}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              ) : (
+                                <Link
+                                  key={sub.name}
+                                  href={sub.href}
+                                  className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  {sub.name}
+                                </Link>
+                              )
+                            )}
                           </div>
                         )}
                       </div>
