@@ -105,6 +105,11 @@ export default function Navigation() {
     return () => clearInterval(interval);
   }, [slotModalOpen]);
 
+  // Add a handler for booking
+  const handleBookSlot = (facility: string, time: string) => {
+    alert(`Booking requested for ${facility} at ${time}`);
+  };
+
   return (
     <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm py-2">
       <nav className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
@@ -349,6 +354,12 @@ export default function Navigation() {
                                                 </span>
                                               ) : null}
                                             </div>
+                                            <button
+                                              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                                              onClick={() => handleBookSlot(facility.name, slot.time)}
+                                            >
+                                              Book Now
+                                            </button>
                                           </>
                                         ) : (
                                           <span className="text-gray-400 font-semibold">Booked</span>
@@ -394,6 +405,12 @@ export default function Navigation() {
           <div className="absolute inset-0" onClick={() => setSlotModalOpen(false)} />
           <div className="relative bg-white rounded-xl shadow-2xl p-8 w-full max-w-2xl z-10 animate-fade-in-up">
             <button
+              className="absolute top-4 left-4 text-gray-500 hover:text-blue-600 text-lg font-bold border border-gray-300 rounded px-3 py-1 bg-white shadow"
+              onClick={() => setSlotModalOpen(false)}
+            >
+              ← Back
+            </button>
+            <button
               className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold"
               onClick={() => setSlotModalOpen(false)}
               aria-label="Close"
@@ -425,6 +442,12 @@ export default function Navigation() {
                                   </span>
                                 ) : null}
                               </div>
+                              <button
+                                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                                onClick={() => handleBookSlot(facility.name, slot.time)}
+                              >
+                                Book Now
+                              </button>
                             </>
                           ) : (
                             <span className="text-gray-400 font-semibold">Booked</span>
