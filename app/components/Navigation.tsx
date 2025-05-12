@@ -31,12 +31,42 @@ const restaurantItems = [
   { name: "Offers", icon: "🎉", href: "/resturents/offers" },
 ];
 
+// Mock slot data
+const slotFacilities = [
+  {
+    name: "Badminton Court",
+    slots: [
+      { time: "08:00 - 09:00", status: "free", expiresAt: Date.now() + 24 * 60 * 60 * 1000 },
+      { time: "09:00 - 10:00", status: "booked" },
+      { time: "10:00 - 11:00", status: "free", expiresAt: Date.now() + 20 * 60 * 60 * 1000 },
+    ],
+  },
+  {
+    name: "Futsal Arena",
+    slots: [
+      { time: "08:00 - 09:00", status: "booked" },
+      { time: "09:00 - 10:00", status: "free", expiresAt: Date.now() + 12 * 60 * 60 * 1000 },
+      { time: "10:00 - 11:00", status: "free", expiresAt: Date.now() + 5 * 60 * 60 * 1000 },
+    ],
+  },
+  {
+    name: "Table Tennis",
+    slots: [
+      { time: "08:00 - 09:00", status: "free", expiresAt: Date.now() + 8 * 60 * 60 * 1000 },
+      { time: "09:00 - 10:00", status: "free", expiresAt: Date.now() + 2 * 60 * 60 * 1000 },
+      { time: "10:00 - 11:00", status: "booked" },
+    ],
+  },
+];
+
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
   const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
   const [foodSubmenuOpen, setFoodSubmenuOpen] = useState("");
   const restaurantRef = useRef<HTMLDivElement>(null);
+  const [slotModalOpen, setSlotModalOpen] = useState(false);
+  const [countdowns, setCountdowns] = useState<Record<string, number>>({});
 
   // Click-away handler to close dropdown
   useEffect(() => {
@@ -56,6 +86,24 @@ export default function Navigation() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [restaurantDropdownOpen]);
+
+  // Countdown logic
+  useEffect(() => {
+    if (!slotModalOpen) return;
+    const interval = setInterval(() => {
+      const newCountdowns: Record<string, number> = {};
+      slotFacilities.forEach(facility => {
+        facility.slots.forEach(slot => {
+          if (slot.status === "free" && slot.expiresAt) {
+            const remaining = Math.max(0, Math.floor((slot.expiresAt - Date.now()) / 1000));
+            newCountdowns[facility.name + slot.time] = remaining;
+          }
+        });
+      });
+      setCountdowns(newCountdowns);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [slotModalOpen]);
 
   return (
     <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm py-2">
@@ -145,6 +193,14 @@ export default function Navigation() {
                     )}
                   </div>
                 </div>
+              ) : item.name.trim() === "Slot" ? (
+                <button
+                  key={item.name}
+                  onClick={() => setSlotModalOpen(true)}
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
+                >
+                  {item.name}
+                </button>
               ) : (
                 <Link
                   key={item.name}
@@ -254,6 +310,58 @@ export default function Navigation() {
                           </div>
                         )}
                       </div>
+                    ) : item.name.trim() === "Slot" ? (
+                      <div key={item.name}>
+                        <button
+                          className="-mx-3 w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 focus:outline-none"
+                          onClick={() => setSlotModalOpen(true)}
+                          type="button"
+                          aria-haspopup="true"
+                          aria-expanded={slotModalOpen}
+                        >
+                          {item.name}
+                          <svg className={`w-4 h-4 ml-2 transition-transform ${slotModalOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        {slotModalOpen && (
+                          <div className="pl-4">
+                            {slotFacilities.map((facility) => (
+                              <div key={facility.name} className="mb-2">
+                                <div className="px-4 py-2 text-xs font-bold text-gray-500 flex items-center gap-2">
+                                  <span className="text-lg">{facility.name}</span>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                  {facility.slots.map((slot) => (
+                                    <div
+                                      key={slot.time}
+                                      className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-100 text-gray-400"}`}
+                                    >
+                                      <div className="font-semibold text-lg">{slot.time}</div>
+                                      <div className="mt-2">
+                                        {slot.status === "free" ? (
+                                          <>
+                                            <span className="text-green-600 font-bold">Free</span>
+                                            <div className="text-xs mt-1 text-gray-600">
+                                              {countdowns[facility.name + slot.time] !== undefined ? (
+                                                <span>
+                                                  {Math.floor(countdowns[facility.name + slot.time] / 3600).toString().padStart(2, '0')}
+                                                  :{Math.floor((countdowns[facility.name + slot.time] % 3600) / 60).toString().padStart(2, '0')}
+                                                  :{(countdowns[facility.name + slot.time] % 60).toString().padStart(2, '0')} left
+                                                </span>
+                                              ) : null}
+                                            </div>
+                                          </>
+                                        ) : (
+                                          <span className="text-gray-400 font-semibold">Booked</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ) : (
                       <Link
                         key={item.name}
@@ -280,6 +388,57 @@ export default function Navigation() {
           </div>
         </div>
       </nav>
+      {/* Slot Modal */}
+      {slotModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
+          <div className="absolute inset-0" onClick={() => setSlotModalOpen(false)} />
+          <div className="relative bg-white rounded-xl shadow-2xl p-8 w-full max-w-2xl z-10 animate-fade-in-up">
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold"
+              onClick={() => setSlotModalOpen(false)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <h2 className="text-2xl font-bold mb-6 text-center">Available Slots</h2>
+            <div className="space-y-6">
+              {slotFacilities.map(facility => (
+                <div key={facility.name}>
+                  <h3 className="text-lg font-semibold mb-2">{facility.name}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {facility.slots.map(slot => (
+                      <div
+                        key={slot.time}
+                        className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-100 text-gray-400"}`}
+                      >
+                        <div className="font-semibold text-lg">{slot.time}</div>
+                        <div className="mt-2">
+                          {slot.status === "free" ? (
+                            <>
+                              <span className="text-green-600 font-bold">Free</span>
+                              <div className="text-xs mt-1 text-gray-600">
+                                {countdowns[facility.name + slot.time] !== undefined ? (
+                                  <span>
+                                    {Math.floor(countdowns[facility.name + slot.time] / 3600).toString().padStart(2, '0')}
+                                    :{Math.floor((countdowns[facility.name + slot.time] % 3600) / 60).toString().padStart(2, '0')}
+                                    :{(countdowns[facility.name + slot.time] % 60).toString().padStart(2, '0')} left
+                                  </span>
+                                ) : null}
+                              </div>
+                            </>
+                          ) : (
+                            <span className="text-gray-400 font-semibold">Booked</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 } 
