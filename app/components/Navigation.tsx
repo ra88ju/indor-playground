@@ -8,7 +8,7 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "Restaurant", href: "/resturents" },
   { name: "Facilities", href: "/facilities" },
-  { name: "Booking", href: "/booking" },
+  { name: "Slot ", href: "/sooking" },
   { name: "Events", href: "/events" },
   { name: "Contact", href: "/contact" },
   { name: "About", href: "/about" },
