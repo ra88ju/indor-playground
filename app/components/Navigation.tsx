@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
@@ -36,6 +36,26 @@ export default function Navigation() {
   const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
   const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
   const [foodSubmenuOpen, setFoodSubmenuOpen] = useState("");
+  const restaurantRef = useRef<HTMLDivElement>(null);
+
+  // Click-away handler to close dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (restaurantRef.current && !restaurantRef.current.contains(event.target as Node)) {
+        setRestaurantDropdownOpen(false);
+        setMenuDropdownOpen(false);
+        setFoodSubmenuOpen("");
+      }
+    }
+    if (restaurantDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [restaurantDropdownOpen]);
 
   return (
     <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm py-2">
@@ -61,17 +81,14 @@ export default function Navigation() {
               item.name === "Restaurant" ? (
                 <div
                   key={item.name}
-                  className="relative group"
-                  tabIndex={0}
-                  onMouseEnter={() => setRestaurantDropdownOpen(true)}
-                  onMouseLeave={() => { setRestaurantDropdownOpen(false); setMenuDropdownOpen(false); setFoodSubmenuOpen(""); }}
-                  onFocus={() => setRestaurantDropdownOpen(true)}
-                  onBlur={() => { setRestaurantDropdownOpen(false); setMenuDropdownOpen(false); setFoodSubmenuOpen(""); }}
+                  className="relative"
+                  ref={restaurantRef}
                 >
                   <button
                     className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1 focus:outline-none"
                     aria-haspopup="true"
                     aria-expanded={restaurantDropdownOpen}
+                    onClick={() => setRestaurantDropdownOpen((open) => !open)}
                   >
                     {item.name}
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
@@ -173,7 +190,7 @@ export default function Navigation() {
                       <div key={item.name}>
                         <button
                           className="-mx-3 w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 focus:outline-none"
-                          onClick={() => setRestaurantDropdownOpen(!restaurantDropdownOpen)}
+                          onClick={() => setRestaurantDropdownOpen((open) => !open)}
                           type="button"
                           aria-haspopup="true"
                           aria-expanded={restaurantDropdownOpen}
