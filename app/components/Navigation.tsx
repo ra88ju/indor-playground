@@ -67,6 +67,8 @@ export default function Navigation() {
   const restaurantRef = useRef<HTMLDivElement>(null);
   const [slotModalOpen, setSlotModalOpen] = useState(false);
   const [countdowns, setCountdowns] = useState<Record<string, number>>({});
+  const [selectedFacility, setSelectedFacility] = useState<string>("All");
+  const [bookingSlot, setBookingSlot] = useState<{facility: string, time: string} | null>(null);
 
   // Click-away handler to close dropdown
   useEffect(() => {
@@ -329,47 +331,51 @@ export default function Navigation() {
                         </button>
                         {slotModalOpen && (
                           <div className="pl-4">
-                            {slotFacilities.map((facility) => (
-                              <div key={facility.name} className="mb-2">
-                                <div className="px-4 py-2 text-xs font-bold text-gray-500 flex items-center gap-2">
-                                  <span className="text-lg">{facility.name}</span>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                  {facility.slots.map((slot) => (
-                                    <div
-                                      key={slot.time}
-                                      className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-100 text-gray-400"}`}
-                                    >
-                                      <div className="font-semibold text-lg">{slot.time}</div>
-                                      <div className="mt-2">
-                                        {slot.status === "free" ? (
-                                          <>
-                                            <span className="text-green-600 font-bold">Free</span>
-                                            <div className="text-xs mt-1 text-gray-600">
-                                              {countdowns[facility.name + slot.time] !== undefined ? (
-                                                <span>
-                                                  {Math.floor(countdowns[facility.name + slot.time] / 3600).toString().padStart(2, '0')}
-                                                  :{Math.floor((countdowns[facility.name + slot.time] % 3600) / 60).toString().padStart(2, '0')}
-                                                  :{(countdowns[facility.name + slot.time] % 60).toString().padStart(2, '0')} left
-                                                </span>
-                                              ) : null}
+                            {slotFacilities
+                              .filter(facility => selectedFacility === "All" || facility.name === selectedFacility)
+                              .map(facility => {
+                                return (
+                                  <div key={facility.name}>
+                                    <h3 className="text-lg font-semibold mb-2">{facility.name}</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                      {facility.slots.map(slot => {
+                                        return (
+                                          <div
+                                            key={slot.time}
+                                            className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-100 text-gray-400"}`}
+                                          >
+                                            <div className="font-semibold text-lg">{slot.time}</div>
+                                            <div className="mt-2">
+                                              {slot.status === "free" ? (
+                                                <>
+                                                  <span className="text-green-600 font-bold">Free</span>
+                                                  <div className="text-xs mt-1 text-gray-600">
+                                                    {countdowns[facility.name + slot.time] !== undefined ? (
+                                                      <span>
+                                                        {Math.floor(countdowns[facility.name + slot.time] / 3600).toString().padStart(2, '0')}
+                                                        :{Math.floor((countdowns[facility.name + slot.time] % 3600) / 60).toString().padStart(2, '0')}
+                                                        :{(countdowns[facility.name + slot.time] % 60).toString().padStart(2, '0')} left
+                                                      </span>
+                                                    ) : null}
+                                                  </div>
+                                                  <button
+                                                    className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                                                    onClick={() => setBookingSlot({ facility: facility.name, time: slot.time })}
+                                                  >
+                                                    Book Now
+                                                  </button>
+                                                </>
+                                              ) : (
+                                                <span className="text-gray-400 font-semibold">Booked</span>
+                                              )}
                                             </div>
-                                            <button
-                                              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                                              onClick={() => handleBookSlot(facility.name, slot.time)}
-                                            >
-                                              Book Now
-                                            </button>
-                                          </>
-                                        ) : (
-                                          <span className="text-gray-400 font-semibold">Booked</span>
-                                        )}
-                                      </div>
+                                          </div>
+                                        );
+                                      })}
                                     </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
+                                  </div>
+                                );
+                              })}
                           </div>
                         )}
                       </div>
@@ -404,12 +410,26 @@ export default function Navigation() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
           <div className="absolute inset-0" onClick={() => setSlotModalOpen(false)} />
           <div className="relative bg-white rounded-xl shadow-2xl p-8 w-full max-w-2xl z-10 animate-fade-in-up">
+            {/* Back Button */}
             <button
               className="absolute top-4 left-4 text-gray-500 hover:text-blue-600 text-lg font-bold border border-gray-300 rounded px-3 py-1 bg-white shadow"
               onClick={() => setSlotModalOpen(false)}
             >
               ← Back
             </button>
+            {/* Filter Dropdown */}
+            <div className="mb-6 flex justify-center">
+              <select
+                className="border rounded px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                value={selectedFacility}
+                onChange={e => setSelectedFacility(e.target.value)}
+              >
+                <option value="All">All Facilities</option>
+                {slotFacilities.map(f => (
+                  <option key={f.name} value={f.name}>{f.name}</option>
+                ))}
+              </select>
+            </div>
             <button
               className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold"
               onClick={() => setSlotModalOpen(false)}
@@ -419,46 +439,93 @@ export default function Navigation() {
             </button>
             <h2 className="text-2xl font-bold mb-6 text-center">Available Slots</h2>
             <div className="space-y-6">
-              {slotFacilities.map(facility => (
-                <div key={facility.name}>
-                  <h3 className="text-lg font-semibold mb-2">{facility.name}</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {facility.slots.map(slot => (
-                      <div
-                        key={slot.time}
-                        className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-100 text-gray-400"}`}
-                      >
-                        <div className="font-semibold text-lg">{slot.time}</div>
-                        <div className="mt-2">
-                          {slot.status === "free" ? (
-                            <>
-                              <span className="text-green-600 font-bold">Free</span>
-                              <div className="text-xs mt-1 text-gray-600">
-                                {countdowns[facility.name + slot.time] !== undefined ? (
-                                  <span>
-                                    {Math.floor(countdowns[facility.name + slot.time] / 3600).toString().padStart(2, '0')}
-                                    :{Math.floor((countdowns[facility.name + slot.time] % 3600) / 60).toString().padStart(2, '0')}
-                                    :{(countdowns[facility.name + slot.time] % 60).toString().padStart(2, '0')} left
-                                  </span>
-                                ) : null}
+              {slotFacilities
+                .filter(facility => selectedFacility === "All" || facility.name === selectedFacility)
+                .map(facility => {
+                  return (
+                    <div key={facility.name}>
+                      <h3 className="text-lg font-semibold mb-2">{facility.name}</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {facility.slots.map(slot => {
+                          return (
+                            <div
+                              key={slot.time}
+                              className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-100 text-gray-400"}`}
+                            >
+                              <div className="font-semibold text-lg">{slot.time}</div>
+                              <div className="mt-2">
+                                {slot.status === "free" ? (
+                                  <>
+                                    <span className="text-green-600 font-bold">Free</span>
+                                    <div className="text-xs mt-1 text-gray-600">
+                                      {countdowns[facility.name + slot.time] !== undefined ? (
+                                        <span>
+                                          {Math.floor(countdowns[facility.name + slot.time] / 3600).toString().padStart(2, '0')}
+                                          :{Math.floor((countdowns[facility.name + slot.time] % 3600) / 60).toString().padStart(2, '0')}
+                                          :{(countdowns[facility.name + slot.time] % 60).toString().padStart(2, '0')} left
+                                        </span>
+                                      ) : null}
+                                    </div>
+                                    <button
+                                      className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                                      onClick={() => setBookingSlot({ facility: facility.name, time: slot.time })}
+                                    >
+                                      Book Now
+                                    </button>
+                                  </>
+                                ) : (
+                                  <span className="text-gray-400 font-semibold">Booked</span>
+                                )}
                               </div>
-                              <button
-                                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                                onClick={() => handleBookSlot(facility.name, slot.time)}
-                              >
-                                Book Now
-                              </button>
-                            </>
-                          ) : (
-                            <span className="text-gray-400 font-semibold">Booked</span>
-                          )}
-                        </div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                    </div>
+                  );
+                })}
             </div>
+          </div>
+        </div>
+      )}
+      {/* Booking Form Modal */}
+      {bookingSlot && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/40">
+          <div className="absolute inset-0" onClick={() => setBookingSlot(null)} />
+          <div className="relative bg-white rounded-xl shadow-2xl p-8 w-full max-w-md z-10 animate-fade-in-up">
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold"
+              onClick={() => setBookingSlot(null)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <h2 className="text-xl font-bold mb-4 text-center">Book Slot</h2>
+            <div className="mb-4 text-center">
+              <div className="font-semibold">{bookingSlot.facility}</div>
+              <div className="text-gray-600">{bookingSlot.time}</div>
+            </div>
+            {/* Mock booking form */}
+            <form onSubmit={e => { e.preventDefault(); alert('Booking submitted!'); setBookingSlot(null); }}>
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+              <input
+                type="email"
+                placeholder="Your Email"
+                className="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+              <button
+                type="submit"
+                className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold"
+              >
+                Confirm Booking
+              </button>
+            </form>
           </div>
         </div>
       )}
