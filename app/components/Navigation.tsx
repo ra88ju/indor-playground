@@ -14,8 +14,15 @@ const navigation = [
   { name: "About", href: "/about" },
 ];
 
+const restaurantItems = [
+  { name: "Menu", href: "/resturents/menu" },
+  { name: "Book Table", href: "/resturents/book-table" },
+  { name: "Offers", href: "/resturents/offers" },
+];
+
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
 
   return (
     <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm py-2">
@@ -37,15 +44,44 @@ export default function Navigation() {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigation.map((item) =>
+              item.name === "Restaurant" ? (
+                <div
+                  key={item.name}
+                  className="relative group"
+                  onMouseEnter={() => setRestaurantDropdownOpen(true)}
+                  onMouseLeave={() => setRestaurantDropdownOpen(false)}
+                >
+                  <button
+                    className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1"
+                  >
+                    {item.name}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  {restaurantDropdownOpen && (
+                    <div className="absolute left-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50 animate-fade-in">
+                      {restaurantItems.map((sub) => (
+                        <a
+                          key={sub.name}
+                          href={sub.href}
+                          className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                        >
+                          {sub.name}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
+                >
+                  {item.name}
+                </Link>
+              )
+            )}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <Link
@@ -76,16 +112,43 @@ export default function Navigation() {
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                  {navigation.map((item) =>
+                    item.name === "Restaurant" ? (
+                      <div key={item.name}>
+                        <button
+                          className="-mx-3 w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                          onClick={() => setRestaurantDropdownOpen(!restaurantDropdownOpen)}
+                          type="button"
+                        >
+                          {item.name}
+                          <svg className={`w-4 h-4 ml-2 transition-transform ${restaurantDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        {restaurantDropdownOpen && (
+                          <div className="pl-4">
+                            {restaurantItems.map((sub) => (
+                              <Link
+                                key={sub.name}
+                                href={sub.href}
+                                className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                onClick={() => setMobileMenuOpen(false)}
+                              >
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    )
+                  )}
                 </div>
                 <div className="py-6">
                   <Link
