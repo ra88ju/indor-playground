@@ -99,33 +99,34 @@ export default function FacilitiesPage() {
     <main className="min-h-screen pt-20">
       <div className="container-custom py-12">
         <h1 className="text-4xl font-bold text-center mb-12">Our Facilities</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {facilities.map((facility, index) => (
             <motion.div
               key={facility.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ 
-                scale: 1.02,
+                scale: 1.03,
+                boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.2)",
                 transition: { duration: 0.2 }
               }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 flex flex-col"
             >
-              <div className="relative h-72">
+              <div className="relative w-full aspect-[16/9] bg-gray-100">
                 <Image
                   src={facility.image}
                   alt={facility.name}
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
+                  className="object-cover w-full h-full transition-transform duration-300"
                 />
               </div>
-              <div className="p-6 flex flex-col h-[180px]">
-                <h2 className="text-2xl font-bold mb-2">{facility.name}</h2>
-                <p className="text-black-600 mb-4 flex-grow">{facility.description}</p>
+              <div className="p-6 flex flex-col flex-1">
+                <h2 className="text-2xl font-bold mb-2 text-gray-900">{facility.name}</h2>
+                <p className="text-gray-600 mb-4 flex-grow">{facility.description}</p>
                 <div className="mb-4">
-                  <h3 className="font-semibold mb-2">Features:</h3>
-                  <ul className="list-disc list-inside text-black-600">
+                  <h3 className="font-semibold mb-2 text-gray-800">Features:</h3>
+                  <ul className="list-disc list-inside text-gray-700">
                     {facility.features.map((feature) => (
                       <li key={feature} className="hover:text-blue-600 transition-colors duration-200">
                         {feature}
@@ -139,7 +140,7 @@ export default function FacilitiesPage() {
                   </span>
                   <motion.button
                     onClick={() => handleBookNowClick(facility)}
-                    className="btn-primary text-sm"
+                    className="btn-primary text-sm px-4 py-2 rounded-lg shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
