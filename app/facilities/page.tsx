@@ -120,12 +120,12 @@ export default function FacilitiesPage() {
                   className="object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <div className="p-6 flex flex-col h-[400px]">
+              <div className="p-6 flex flex-col h-[180px]">
                 <h2 className="text-2xl font-bold mb-2">{facility.name}</h2>
-                <p className="text-gray-600 mb-4 flex-grow">{facility.description}</p>
+                <p className="text-black-600 mb-4 flex-grow">{facility.description}</p>
                 <div className="mb-4">
                   <h3 className="font-semibold mb-2">Features:</h3>
-                  <ul className="list-disc list-inside text-gray-600">
+                  <ul className="list-disc list-inside text-black-600">
                     {facility.features.map((feature) => (
                       <li key={feature} className="hover:text-blue-600 transition-colors duration-200">
                         {feature}
