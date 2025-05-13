@@ -6,6 +6,32 @@ import { useState } from "react";
 
 const facilities = [
   {
+    id: "football",
+    name: "Football Arena",
+    description: "Spacious arena with professional turf and lighting, perfect for matches and training.",
+    features: [
+      "FIFA-approved Artificial Turf",
+      "Floodlit Arena",
+      "Changing Rooms",
+      "Spectator Stands",
+    ],
+    pricing: "From $30/hour",
+    image: "/facilities/football.jpg",
+  },
+  {
+    id: "cricket",
+    name: "Cricket Nets",
+    description: "Practice nets with quality pitch and safety nets for cricket enthusiasts.",
+    features: [
+      "Professional Pitch",
+      "Safety Nets",
+      "Bowling Machine",
+      "Coaching Available",
+    ],
+    pricing: "From $25/hour",
+    image: "/facilities/cricket.jpg",
+  },
+  {
     id: "badminton",
     name: "Badminton Courts",
     description: "Professional-grade courts with proper lighting and ventilation. Perfect for both casual players and competitive matches.",
@@ -19,47 +45,21 @@ const facilities = [
     image: "/facilities/badminton.jpg",
   },
   {
-    id: "futsal",
-    name: "Futsal Arena",
-    description: "FIFA-approved artificial turf for the perfect playing experience. Ideal for 5-a-side matches and training sessions.",
+    id: "swimming-pool",
+    name: "Swimming Pool",
+    description: "Clean and safe swimming pool suitable for all ages, with lifeguard supervision.",
     features: [
-      "FIFA-approved Artificial Turf",
-      "Professional Goals",
-      "Floodlit",
-      "Changing Rooms",
+      "Heated Pool",
+      "Lifeguard On Duty",
+      "Changing Facilities",
+      "Kids Area",
     ],
-    pricing: "From $30/hour",
-    image: "/facilities/futsal.jpg",
-  },
-  {
-    id: "basketball",
-    name: "Basketball Court",
-    description: "Full-size court with professional flooring and equipment. Suitable for training, matches, and casual play.",
-    features: [
-      "Full-size Court",
-      "Professional Flooring",
-      "Scoreboard",
-      "Training Equipment",
-    ],
-    pricing: "From $25/hour",
-    image: "/facilities/basketball.jpg",
-  },
-  {
-    id: "table-tennis",
-    name: "Table Tennis",
-    description: "Multiple tables with professional equipment available. Perfect for both beginners and advanced players.",
-    features: [
-      "4 Professional Tables",
-      "Equipment Rental",
-      "Training Area",
-      "Tournament Ready",
-    ],
-    pricing: "From $15/hour",
-    image: "/facilities/table-tennis.jpg",
+    pricing: "From $18/hour",
+    image: "/facilities/swimming-pool.jpg",
   },
   {
     id: "kids-zone",
-    name: "Kids Play Zone",
+    name: "Kids Zone",
     description: "A safe and fun environment for children with various activities and games. Supervised play area with trained staff.",
     features: [
       "Soft Play Area",
@@ -70,6 +70,19 @@ const facilities = [
     ],
     pricing: "From $10/hour",
     image: "/facilities/kids-zone.jpg",
+  },
+  {
+    id: "restaurant",
+    name: "Restaurant",
+    description: "Enjoy delicious meals and snacks at our on-site restaurant, offering a variety of cuisines.",
+    features: [
+      "Multi-cuisine Menu",
+      "Family Friendly",
+      "Comfortable Seating",
+      "Special Kids Menu",
+    ],
+    pricing: "Menu Priced",
+    image: "/facilities/restaurant.jpg",
   },
 ];
 
