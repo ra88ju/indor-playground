@@ -31,8 +31,8 @@ const restaurantItems = [
   { name: "Offers", icon: "🎉", href: "/resturents/offers" },
 ];
 
-// Mock slot data
-const slotFacilities = [
+// Replace the mock slotFacilities with state
+const [slotFacilities, setSlotFacilities] = useState([
   {
     name: "Badminton Court",
     slots: [
@@ -57,7 +57,7 @@ const slotFacilities = [
       { time: "10:00 - 11:00", status: "booked" },
     ],
   },
-];
+]);
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -342,7 +342,7 @@ export default function Navigation() {
                                         return (
                                           <div
                                             key={slot.time}
-                                            className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-100 text-gray-400"}`}
+                                            className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "bg-black text-white border-black"}`}
                                           >
                                             <div className="font-semibold text-lg">{slot.time}</div>
                                             <div className="mt-2">
@@ -450,7 +450,7 @@ export default function Navigation() {
                           return (
                             <div
                               key={slot.time}
-                              className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "border-gray-300 bg-gray-100 text-gray-400"}`}
+                              className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "bg-black text-white border-black"}`}
                             >
                               <div className="font-semibold text-lg">{slot.time}</div>
                               <div className="mt-2">
