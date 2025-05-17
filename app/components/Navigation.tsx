@@ -31,34 +31,6 @@ const restaurantItems = [
   { name: "Offers", icon: "🎉", href: "/resturents/offers" },
 ];
 
-// Replace the mock slotFacilities with state
-const [slotFacilities, setSlotFacilities] = useState([
-  {
-    name: "Badminton Court",
-    slots: [
-      { time: "08:00 - 09:00", status: "free", expiresAt: Date.now() + 24 * 60 * 60 * 1000 },
-      { time: "09:00 - 10:00", status: "booked" },
-      { time: "10:00 - 11:00", status: "free", expiresAt: Date.now() + 20 * 60 * 60 * 1000 },
-    ],
-  },
-  {
-    name: "Futsal Arena",
-    slots: [
-      { time: "08:00 - 09:00", status: "booked" },
-      { time: "09:00 - 10:00", status: "free", expiresAt: Date.now() + 12 * 60 * 60 * 1000 },
-      { time: "10:00 - 11:00", status: "free", expiresAt: Date.now() + 5 * 60 * 60 * 1000 },
-    ],
-  },
-  {
-    name: "Table Tennis",
-    slots: [
-      { time: "08:00 - 09:00", status: "free", expiresAt: Date.now() + 8 * 60 * 60 * 1000 },
-      { time: "09:00 - 10:00", status: "free", expiresAt: Date.now() + 2 * 60 * 60 * 1000 },
-      { time: "10:00 - 11:00", status: "booked" },
-    ],
-  },
-]);
-
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
@@ -69,6 +41,32 @@ export default function Navigation() {
   const [countdowns, setCountdowns] = useState<Record<string, number>>({});
   const [selectedFacility, setSelectedFacility] = useState<string>("All");
   const [bookingSlot, setBookingSlot] = useState<{facility: string, time: string} | null>(null);
+  const [slotFacilities, setSlotFacilities] = useState([
+    {
+      name: "Badminton Court",
+      slots: [
+        { time: "08:00 - 09:00", status: "free", expiresAt: Date.now() + 24 * 60 * 60 * 1000 },
+        { time: "09:00 - 10:00", status: "booked" },
+        { time: "10:00 - 11:00", status: "free", expiresAt: Date.now() + 20 * 60 * 60 * 1000 },
+      ],
+    },
+    {
+      name: "Futsal Arena",
+      slots: [
+        { time: "08:00 - 09:00", status: "booked" },
+        { time: "09:00 - 10:00", status: "free", expiresAt: Date.now() + 12 * 60 * 60 * 1000 },
+        { time: "10:00 - 11:00", status: "free", expiresAt: Date.now() + 5 * 60 * 60 * 1000 },
+      ],
+    },
+    {
+      name: "Table Tennis",
+      slots: [
+        { time: "08:00 - 09:00", status: "free", expiresAt: Date.now() + 8 * 60 * 60 * 1000 },
+        { time: "09:00 - 10:00", status: "free", expiresAt: Date.now() + 2 * 60 * 60 * 1000 },
+        { time: "10:00 - 11:00", status: "booked" },
+      ],
+    },
+  ]);
 
   // Click-away handler to close dropdown
   useEffect(() => {
