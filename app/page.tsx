@@ -6,24 +6,39 @@ import { motion } from "framer-motion";
 
 const facilities = [
   {
-    title: "Badminton ",
+    title: "Badminton ", // badmainton
     description: "Professional-grade courts with proper lighting and ventilation",
     icon: "🏸",
     image: "/facilities/badminton.jpg"
   },
+  // footbal
   {
     title: "Footbal",
     description: "FIFA-approved artificial turf for the perfect playing experience",
     icon: "⚽",
     image: "/facilities/futsal.jpg"
   },
+  // cricket
   {
     title: "Cricket",
     description: "Full-size court with professional flooring and equipment",
     icon: "🏀",
     image: "/facilities/cricket.jpg"
   },
-  
+  // Kid Zone
+  {
+    title: "Kid Zone",
+    description: "Fun and safe play area for children with a variety of games and activities",
+    icon: "🧸",
+    image: "/facilities/kidzone.jpg" // Use a placeholder or add your own image
+  },
+  // Swimming Pool
+  {
+    title: "Swimming Pool",
+    description: "Indoor heated swimming pool for all ages and skill levels",
+    icon: "🏊‍♂️",
+    image: "/facilities/swimmingpool.jpg" // Use a placeholder or add your own image
+  },
 ];
 
 export default function Home() {
