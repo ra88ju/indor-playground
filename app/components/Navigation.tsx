@@ -3,32 +3,15 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import RestaurantMenu from './resturents/RestaurantMenu';
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Restaurant", href: "/resturents" },
   { name: "Facilities", href: "/facilities" },
-  { name: "Slot ", href: "/slot" },
   { name: "Events", href: "/events" },
   { name: "Contact", href: "/contact" },
   { name: "About", href: "/about" },
-];
-// Resturents itmes 
-const restaurantItems = [
-  { name: "Menu", icon: "📜", submenu: [
-    { name: "Bangla Food", icon: "🍛", items: [
-      { name: "Bhuna Khichuri", href: "/resturents/menu/bangla/bhuna-khichuri" },
-      { name: "Panta Ilish", href: "/resturents/menu/bangla/panta-ilish" },
-      { name: "Morog Polao", href: "/resturents/menu/bangla/morog-polao" },
-    ] },
-    { name: "Chinese Food", icon: "🥡", items: [
-      { name: "Fried Rice", href: "/resturents/menu/chinese/fried-rice" },
-      { name: "Chicken Chow Mein", href: "/resturents/menu/chinese/chow-mein" },
-      { name: "Spring Roll", href: "/resturents/menu/chinese/spring-roll" },
-    ] },
-  ] },
-  { name: "Book Table", icon: "🪑", href: "/resturents/book-table" },
-  { name: "Offers", icon: "🎉", href: "/resturents/offers" },
 ];
 
 export default function Navigation() {
@@ -94,64 +77,16 @@ export default function Navigation() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   <div className={`absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl py-2 z-50 transition-all duration-200 ${restaurantDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
-                    {restaurantItems.map((sub, idx) =>
-                      sub.submenu ? (
-                        <div
-                          key={sub.name}
-                          className="relative group mb-2"
-                        >
-                          <button
-                            className="w-full text-left flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-semibold focus:outline-none"
-                            aria-haspopup="true"
-                            aria-expanded={menuDropdownOpen}
-                            onClick={() => setMenuDropdownOpen(!menuDropdownOpen)}
-                          >
-                            <span className="text-lg">{sub.icon}</span> {sub.name}
-                            <svg className="w-3 h-3 ml-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                          </button>
-                          <div className={`absolute left-full top-0 ml-2 w-52 bg-white rounded-xl shadow-2xl py-2 z-50 transition-all duration-200 ${menuDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
-                            {sub.submenu.map((cat) => (
-                              <div key={cat.name}>
-                                <div className="px-4 py-2 text-xs font-bold text-gray-500 flex items-center gap-2">
-                                  <span className="text-lg">{cat.icon}</span> {cat.name}
-                                </div>
-                                {cat.items.map((item) => (
-                                  <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className="block px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors rounded-lg"
-                                  >
-                                    {item.name}
-                                  </a>
-                                ))}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null
-                    )}
-                    {/* Divider */}
-                    <div className="my-2 border-t border-gray-200" />
-                    {restaurantItems.map((sub) =>
-                      !sub.submenu ? (
-                        <a
-                          key={sub.name}
-                          href={sub.href}
-                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-semibold rounded-lg"
-                        >
-                          <span className="text-lg">{sub.icon}</span> {sub.name}
-                        </a>
-                      ) : null
-                    )}
+                    <RestaurantMenu
+                      restaurantDropdownOpen={restaurantDropdownOpen}
+                      setRestaurantDropdownOpen={setRestaurantDropdownOpen}
+                      menuDropdownOpen={menuDropdownOpen}
+                      setMenuDropdownOpen={setMenuDropdownOpen}
+                      foodSubmenuOpen={foodSubmenuOpen}
+                      setFoodSubmenuOpen={setFoodSubmenuOpen}
+                    />
                   </div>
                 </div>
-              ) : item.name.trim() === "Slot" ? (
-                <button
-                  key={item.name}
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
-                >
-                  {item.name}
-                </button>
               ) : (
                 <Link
                   key={item.name}
@@ -207,74 +142,14 @@ export default function Navigation() {
                         </button>
                         {restaurantDropdownOpen && (
                           <div className="pl-4">
-                            {restaurantItems.map((sub, idx) =>
-                              sub.submenu ? (
-                                <div key={sub.name} className="mb-2">
-                                  <button
-                                    className="w-full flex items-center gap-2 justify-between rounded-lg px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-semibold focus:outline-none"
-                                    onClick={() => setMenuDropdownOpen(!menuDropdownOpen)}
-                                    type="button"
-                                    aria-haspopup="true"
-                                    aria-expanded={menuDropdownOpen}
-                                  >
-                                    <span className="text-lg">{sub.icon}</span> {sub.name}
-                                    <svg className={`w-3 h-3 ml-2 transition-transform ${menuDropdownOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-                                  </button>
-                                  {menuDropdownOpen && (
-                                    <div className="pl-4">
-                                      {sub.submenu.map((cat) => (
-                                        <div key={cat.name}>
-                                          <div className="px-4 py-2 text-xs font-bold text-gray-500 flex items-center gap-2">
-                                            <span className="text-lg">{cat.icon}</span> {cat.name}
-                                          </div>
-                                          {cat.items.map((item) => (
-                                            <Link
-                                              key={item.name}
-                                              href={item.href}
-                                              className="block px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors rounded-lg"
-                                              onClick={() => setMobileMenuOpen(false)}
-                                            >
-                                              {item.name}
-                                            </Link>
-                                          ))}
-                                        </div>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-                              ) : null
-                            )}
-                            {/* Divider */}
-                            <div className="my-2 border-t border-gray-200" />
-                            {restaurantItems.map((sub) =>
-                              !sub.submenu ? (
-                                <Link
-                                  key={sub.name}
-                                  href={sub.href}
-                                  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-semibold rounded-lg"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                >
-                                  <span className="text-lg">{sub.icon}</span> {sub.name}
-                                </Link>
-                              ) : null
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    ) : item.name.trim() === "Slot" ? (
-                      <div key={item.name}>
-                        <button
-                          className="-mx-3 w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 focus:outline-none"
-                          type="button"
-                          aria-haspopup="true"
-                          aria-expanded={mobileMenuOpen}
-                        >
-                          {item.name}
-                          <svg className={`w-4 h-4 ml-2 transition-transform ${mobileMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                        {mobileMenuOpen && (
-                          <div className="pl-4">
-                            {/* Slot content */}
+                            <RestaurantMenu
+                              restaurantDropdownOpen={restaurantDropdownOpen}
+                              setRestaurantDropdownOpen={setRestaurantDropdownOpen}
+                              menuDropdownOpen={menuDropdownOpen}
+                              setMenuDropdownOpen={setMenuDropdownOpen}
+                              foodSubmenuOpen={foodSubmenuOpen}
+                              setFoodSubmenuOpen={setFoodSubmenuOpen}
+                            />
                           </div>
                         )}
                       </div>
