@@ -31,6 +31,52 @@ const restaurantItems = [
   { name: "Offers", icon: "🎉", href: "/resturents/offers" },
 ];
 
+// SlotCard component for professional, dynamic slot display
+function SlotCard({ slot, facilityName, onBook, countdown }: {
+  slot: any;
+  facilityName: string;
+  onBook: (facility: string, time: string) => void;
+  countdown?: number;
+}) {
+  const isBooked = slot.status === "booked";
+  return (
+    <div
+      className={`rounded-lg p-4 border text-center transition-all duration-200 shadow-md
+        ${isBooked ? "bg-black text-white border-black" : "border-green-400 bg-green-50 hover:shadow-lg hover:border-blue-400"}
+        ${isBooked ? "opacity-90" : "hover:scale-105"}
+      `}
+      style={{ minHeight: 160 }}
+    >
+      <div className="font-bold text-xl mb-2 tracking-wide">{slot.time}</div>
+      <div className="mt-2">
+        {isBooked ? (
+          <span className="text-gray-300 font-semibold text-lg">Booked</span>
+        ) : (
+          <>
+            <span className="text-green-600 font-bold text-lg">Free</span>
+            <div className="text-xs mt-1 text-gray-600">
+              {typeof countdown === "number" && (
+                <span>
+                  {Math.floor(countdown / 3600).toString().padStart(2, '0')}
+                  :{Math.floor((countdown % 3600) / 60).toString().padStart(2, '0')}
+                  :{(countdown % 60).toString().padStart(2, '0')} left
+                </span>
+              )}
+            </div>
+            <button
+              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed w-full font-semibold"
+              onClick={() => onBook(facilityName, slot.time)}
+              disabled={isBooked}
+            >
+              Book Now
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
@@ -67,6 +113,7 @@ export default function Navigation() {
       ],
     },
   ]);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Click-away handler to close dropdown
   useEffect(() => {
@@ -105,9 +152,16 @@ export default function Navigation() {
     return () => clearInterval(interval);
   }, [slotModalOpen]);
 
-  // Add a handler for booking
+  // Professional booking handler
   const handleBookSlot = (facility: string, time: string) => {
-    alert(`Booking requested for ${facility} at ${time}`);
+    setSlotFacilities(prev => prev.map(f =>
+      f.name === facility
+        ? { ...f, slots: f.slots.map(s => s.time === time ? { ...s, status: "booked" } : s) }
+        : f
+    ));
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 2000);
+    setBookingSlot(null);
   };
 
   return (
@@ -338,36 +392,13 @@ export default function Navigation() {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                       {facility.slots.map(slot => {
                                         return (
-                                          <div
+                                          <SlotCard
                                             key={slot.time}
-                                            className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "bg-black text-white border-black"}`}
-                                          >
-                                            <div className="font-semibold text-lg">{slot.time}</div>
-                                            <div className="mt-2">
-                                              {slot.status === "free" ? (
-                                                <>
-                                                  <span className="text-green-600 font-bold">Free</span>
-                                                  <div className="text-xs mt-1 text-gray-600">
-                                                    {countdowns[facility.name + slot.time] !== undefined ? (
-                                                      <span>
-                                                        {Math.floor(countdowns[facility.name + slot.time] / 3600).toString().padStart(2, '0')}
-                                                        :{Math.floor((countdowns[facility.name + slot.time] % 3600) / 60).toString().padStart(2, '0')}
-                                                        :{(countdowns[facility.name + slot.time] % 60).toString().padStart(2, '0')} left
-                                                      </span>
-                                                    ) : null}
-                                                  </div>
-                                                  <button
-                                                    className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                                                    onClick={() => setBookingSlot({ facility: facility.name, time: slot.time })}
-                                                  >
-                                                    Book Now
-                                                  </button>
-                                                </>
-                                              ) : (
-                                                <span className="text-gray-400 font-semibold">Booked</span>
-                                              )}
-                                            </div>
-                                          </div>
+                                            slot={slot}
+                                            facilityName={facility.name}
+                                            onBook={handleBookSlot}
+                                            countdown={countdowns[facility.name + slot.time]}
+                                          />
                                         );
                                       })}
                                     </div>
@@ -446,36 +477,13 @@ export default function Navigation() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {facility.slots.map(slot => {
                           return (
-                            <div
+                            <SlotCard
                               key={slot.time}
-                              className={`rounded-lg p-4 border text-center ${slot.status === "free" ? "border-green-400 bg-green-50" : "bg-black text-white border-black"}`}
-                            >
-                              <div className="font-semibold text-lg">{slot.time}</div>
-                              <div className="mt-2">
-                                {slot.status === "free" ? (
-                                  <>
-                                    <span className="text-green-600 font-bold">Free</span>
-                                    <div className="text-xs mt-1 text-gray-600">
-                                      {countdowns[facility.name + slot.time] !== undefined ? (
-                                        <span>
-                                          {Math.floor(countdowns[facility.name + slot.time] / 3600).toString().padStart(2, '0')}
-                                          :{Math.floor((countdowns[facility.name + slot.time] % 3600) / 60).toString().padStart(2, '0')}
-                                          :{(countdowns[facility.name + slot.time] % 60).toString().padStart(2, '0')} left
-                                        </span>
-                                      ) : null}
-                                    </div>
-                                    <button
-                                      className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                                      onClick={() => setBookingSlot({ facility: facility.name, time: slot.time })}
-                                    >
-                                      Book Now
-                                    </button>
-                                  </>
-                                ) : (
-                                  <span className="text-gray-400 font-semibold">Booked</span>
-                                )}
-                              </div>
-                            </div>
+                              slot={slot}
+                              facilityName={facility.name}
+                              onBook={handleBookSlot}
+                              countdown={countdowns[facility.name + slot.time]}
+                            />
                           );
                         })}
                       </div>
