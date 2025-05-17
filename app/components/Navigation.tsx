@@ -31,89 +31,12 @@ const restaurantItems = [
   { name: "Offers", icon: "🎉", href: "/resturents/offers" },
 ];
 
-// SlotCard component for professional, dynamic slot display
-function SlotCard({ slot, facilityName, onBook, countdown }: {
-  slot: any;
-  facilityName: string;
-  onBook: (facility: string, time: string) => void;
-  countdown?: number;
-}) {
-  const isBooked = slot.status === "booked";
-  return (
-    <div
-      className={`rounded-lg p-4 border text-center transition-all duration-200 shadow-md
-        ${isBooked ? "bg-black text-white border-black" : "border-green-400 bg-green-50 hover:shadow-lg hover:border-blue-400"}
-        ${isBooked ? "opacity-90" : "hover:scale-105"}
-      `}
-      style={{ minHeight: 160 }}
-    >
-      <div className="font-bold text-xl mb-2 tracking-wide">{slot.time}</div>
-      <div className="mt-2">
-        {isBooked ? (
-          <span className="text-gray-300 font-semibold text-lg">Booked</span>
-        ) : (
-          <>
-            <span className="text-green-600 font-bold text-lg">Free</span>
-            <div className="text-xs mt-1 text-gray-600">
-              {typeof countdown === "number" && (
-                <span>
-                  {Math.floor(countdown / 3600).toString().padStart(2, '0')}
-                  :{Math.floor((countdown % 3600) / 60).toString().padStart(2, '0')}
-                  :{(countdown % 60).toString().padStart(2, '0')} left
-                </span>
-              )}
-            </div>
-            <button
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed w-full font-semibold"
-              onClick={() => onBook(facilityName, slot.time)}
-              disabled={isBooked}
-            >
-              Book Now
-            </button>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
   const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
   const [foodSubmenuOpen, setFoodSubmenuOpen] = useState("");
   const restaurantRef = useRef<HTMLDivElement>(null);
-  const [slotModalOpen, setSlotModalOpen] = useState(false);
-  const [countdowns, setCountdowns] = useState<Record<string, number>>({});
-  const [selectedFacility, setSelectedFacility] = useState<string>("All");
-  const [bookingSlot, setBookingSlot] = useState<{facility: string, time: string} | null>(null);
-  const [slotFacilities, setSlotFacilities] = useState([
-    {
-      name: "Badminton Court",
-      slots: [
-        { time: "08:00 - 09:00", status: "free", expiresAt: Date.now() + 24 * 60 * 60 * 1000 },
-        { time: "09:00 - 10:00", status: "booked" },
-        { time: "10:00 - 11:00", status: "free", expiresAt: Date.now() + 20 * 60 * 60 * 1000 },
-      ],
-    },
-    {
-      name: "Futsal Arena",
-      slots: [
-        { time: "08:00 - 09:00", status: "booked" },
-        { time: "09:00 - 10:00", status: "free", expiresAt: Date.now() + 12 * 60 * 60 * 1000 },
-        { time: "10:00 - 11:00", status: "free", expiresAt: Date.now() + 5 * 60 * 60 * 1000 },
-      ],
-    },
-    {
-      name: "Table Tennis",
-      slots: [
-        { time: "08:00 - 09:00", status: "free", expiresAt: Date.now() + 8 * 60 * 60 * 1000 },
-        { time: "09:00 - 10:00", status: "free", expiresAt: Date.now() + 2 * 60 * 60 * 1000 },
-        { time: "10:00 - 11:00", status: "booked" },
-      ],
-    },
-  ]);
-  const [showSuccess, setShowSuccess] = useState(false);
 
   // Click-away handler to close dropdown
   useEffect(() => {
@@ -133,36 +56,6 @@ export default function Navigation() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [restaurantDropdownOpen]);
-
-  // Countdown logic
-  useEffect(() => {
-    if (!slotModalOpen) return;
-    const interval = setInterval(() => {
-      const newCountdowns: Record<string, number> = {};
-      slotFacilities.forEach(facility => {
-        facility.slots.forEach(slot => {
-          if (slot.status === "free" && slot.expiresAt) {
-            const remaining = Math.max(0, Math.floor((slot.expiresAt - Date.now()) / 1000));
-            newCountdowns[facility.name + slot.time] = remaining;
-          }
-        });
-      });
-      setCountdowns(newCountdowns);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [slotModalOpen]);
-
-  // Professional booking handler
-  const handleBookSlot = (facility: string, time: string) => {
-    setSlotFacilities(prev => prev.map(f =>
-      f.name === facility
-        ? { ...f, slots: f.slots.map(s => s.time === time ? { ...s, status: "booked" } : s) }
-        : f
-    ));
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 2000);
-    setBookingSlot(null);
-  };
 
   return (
     <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm py-2">
@@ -255,7 +148,6 @@ export default function Navigation() {
               ) : item.name.trim() === "Slot" ? (
                 <button
                   key={item.name}
-                  onClick={() => setSlotModalOpen(true)}
                   className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
                 >
                   {item.name}
@@ -373,38 +265,16 @@ export default function Navigation() {
                       <div key={item.name}>
                         <button
                           className="-mx-3 w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 focus:outline-none"
-                          onClick={() => setSlotModalOpen(true)}
                           type="button"
                           aria-haspopup="true"
-                          aria-expanded={slotModalOpen}
+                          aria-expanded={mobileMenuOpen}
                         >
                           {item.name}
-                          <svg className={`w-4 h-4 ml-2 transition-transform ${slotModalOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                          <svg className={`w-4 h-4 ml-2 transition-transform ${mobileMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                         </button>
-                        {slotModalOpen && (
+                        {mobileMenuOpen && (
                           <div className="pl-4">
-                            {slotFacilities
-                              .filter(facility => selectedFacility === "All" || facility.name === selectedFacility)
-                              .map(facility => {
-                                return (
-                                  <div key={facility.name}>
-                                    <h3 className="text-lg font-semibold mb-2">{facility.name}</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                      {facility.slots.map(slot => {
-                                        return (
-                                          <SlotCard
-                                            key={slot.time}
-                                            slot={slot}
-                                            facilityName={facility.name}
-                                            onBook={handleBookSlot}
-                                            countdown={countdowns[facility.name + slot.time]}
-                                          />
-                                        );
-                                      })}
-                                    </div>
-                                  </div>
-                                );
-                              })}
+                            {/* Slot content */}
                           </div>
                         )}
                       </div>
@@ -434,107 +304,6 @@ export default function Navigation() {
           </div>
         </div>
       </nav>
-      {/* Slot Modal */}
-      {slotModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
-          <div className="absolute inset-0" onClick={() => setSlotModalOpen(false)} />
-          <div className="relative bg-white rounded-xl shadow-2xl p-8 w-full max-w-2xl z-10 animate-fade-in-up">
-            {/* Back Button */}
-            <button
-              className="absolute top-4 left-4 text-black-500 hover:text-blue-600 text-lg font-bold border border-gray-300 rounded px-3 py-1 bg-white shadow"
-              onClick={() => setSlotModalOpen(false)}
-            >
-              ← Back
-            </button>
-            {/* Filter Dropdown */}
-            <div className="mb-6 flex justify-center">
-              <select
-                className="border rounded px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={selectedFacility}
-                onChange={e => setSelectedFacility(e.target.value)}
-              >
-                <option value="All">All Facilities</option>
-                {slotFacilities.map(f => (
-                  <option key={f.name} value={f.name}>{f.name}</option>
-                ))}
-              </select>
-            </div>
-            <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold"
-              onClick={() => setSlotModalOpen(false)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <h2 className="text-2xl font-bold mb-6 text-center">Available Slots</h2>
-            <div className="space-y-6">
-              {slotFacilities
-                .filter(facility => selectedFacility === "All" || facility.name === selectedFacility)
-                .map(facility => {
-                  return (
-                    <div key={facility.name}>
-                      <h3 className="text-lg font-semibold mb-2">{facility.name}</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {facility.slots.map(slot => {
-                          return (
-                            <SlotCard
-                              key={slot.time}
-                              slot={slot}
-                              facilityName={facility.name}
-                              onBook={handleBookSlot}
-                              countdown={countdowns[facility.name + slot.time]}
-                            />
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Booking Form Modal */}
-      {bookingSlot && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/40">
-          <div className="absolute inset-0" onClick={() => setBookingSlot(null)} />
-          <div className="relative bg-white rounded-xl shadow-2xl p-8 w-full max-w-md z-10 animate-fade-in-up">
-            <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold"
-              onClick={() => setBookingSlot(null)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <h2 className="text-xl font-bold mb-4 text-center">Book Slot</h2>
-            <div className="mb-4 text-center">
-              <div className="font-semibold">{bookingSlot.facility}</div>
-              <div className="text-gray-600">{bookingSlot.time}</div>
-            </div>
-            {/* Mock booking form */}
-            <form onSubmit={e => { e.preventDefault(); alert('Booking submitted!'); setBookingSlot(null); }}>
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                required
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="w-full mb-3 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold"
-              >
-                Confirm Booking
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </header>
   );
 } 
