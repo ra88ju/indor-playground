@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import RestaurantMenu from './resturents/RestaurantMenu';
+import Image from "next/image";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Restaurant", href: "/resturents" },
   { name: "Facilities", href: "/facilities" },
+  { name: "Slot", href: "/slot" },
   { name: "Events", href: "/events" },
+  { name: "Restaurant", href: "/resturents" },
   { name: "Contact", href: "/contact" },
   { name: "About", href: "/about" },
 ];
@@ -62,31 +63,21 @@ export default function Navigation() {
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) =>
               item.name === "Restaurant" ? (
-                <div
+                <Link
                   key={item.name}
-                  className="relative"
-                  ref={restaurantRef}
+                  href={item.href}
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
                 >
-                  <button
-                    className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1 focus:outline-none"
-                    aria-haspopup="true"
-                    aria-expanded={restaurantDropdownOpen}
-                    onClick={() => setRestaurantDropdownOpen((open) => !open)}
-                  >
-                    {item.name}
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                  </button>
-                  <div className={`absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl py-2 z-50 transition-all duration-200 ${restaurantDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
-                    <RestaurantMenu
-                      restaurantDropdownOpen={restaurantDropdownOpen}
-                      setRestaurantDropdownOpen={setRestaurantDropdownOpen}
-                      menuDropdownOpen={menuDropdownOpen}
-                      setMenuDropdownOpen={setMenuDropdownOpen}
-                      foodSubmenuOpen={foodSubmenuOpen}
-                      setFoodSubmenuOpen={setFoodSubmenuOpen}
-                    />
-                  </div>
-                </div>
+                  {item.name}
+                </Link>
+              ) : item.name.trim() === "Slot" ? (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
+                >
+                  {item.name}
+                </Link>
               ) : (
                 <Link
                   key={item.name}
@@ -142,17 +133,18 @@ export default function Navigation() {
                         </button>
                         {restaurantDropdownOpen && (
                           <div className="pl-4">
-                            <RestaurantMenu
-                              restaurantDropdownOpen={restaurantDropdownOpen}
-                              setRestaurantDropdownOpen={setRestaurantDropdownOpen}
-                              menuDropdownOpen={menuDropdownOpen}
-                              setMenuDropdownOpen={setMenuDropdownOpen}
-                              foodSubmenuOpen={foodSubmenuOpen}
-                              setFoodSubmenuOpen={setFoodSubmenuOpen}
-                            />
                           </div>
                         )}
                       </div>
+                    ) : item.name.trim() === "Slot" ? (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
                     ) : (
                       <Link
                         key={item.name}
