@@ -45,42 +45,29 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] lg:min-h-[100vh] flex flex-col items-center justify-center py-8 lg:py-0">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/hero-bg.jpg"
-            alt="Indoor Park Rajshahi"
-            fill
-            className="object-cover brightness-50"
-            priority
-          />
-        </div>
-        <div className="container-custom relative z-10 text-center text-white">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-4xl md:text-6xl font-bold mb-6"
-          >
-            Welcome to Indoor Sports Ground 
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl mb-8"
-          >
-            Your Ultimate Indoor Sports Experience
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <Link href="/booking" className="btn-primary text-lg">
-              Book Your Game Now
-            </Link>
-          </motion.div>
+      <section className="relative min-h-[80vh] lg:min-h-[120vh] flex items-center overflow-hidden">
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src="/videos/stadium-animation.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Overlay (optional, for darkening/lightening) */}
+        <div className="absolute inset-0 bg-black/60 z-10" />
+
+        {/* Content */}
+        <div className="relative z-20 w-full text-center">
+          <h1 className="text-5xl font-bold text-white">Welcome to Indoor Sports Ground</h1>
+          <p className="text-2xl text-white mt-4">Your Ultimate Indoor Sports Experience</p>
+          <button className="mt-8 px-8 py-4 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+            Book Your Game Now
+          </button>
         </div>
       </section>
 
