@@ -132,7 +132,16 @@ export default function Navigation() {
                           <svg className={`w-4 h-4 ml-2 transition-transform ${restaurantDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                         </button>
                         {restaurantDropdownOpen && (
-                          <div className="pl-4">
+                          <div className="pl-4 flex flex-col gap-2">
+                            <Link href="/resturents" className="block py-2 text-gray-800 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>
+                              Our Menu
+                            </Link>
+                            <Link href="/resturents#juice-bar" className="block py-2 text-gray-800 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>
+                              Juice Bar
+                            </Link>
+                            <Link href="/resturents#reservation" className="block py-2 text-gray-800 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>
+                              Reservation
+                            </Link>
                           </div>
                         )}
                       </div>
