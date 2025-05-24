@@ -106,17 +106,17 @@ export default function RestaurantPage() {
   return (
     <main className="min-h-screen bg-[#1a1a1a] text-white">
       {/* Hero Section - Inspired by the image */}
-      <section className="relative h-[106vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[60vh] lg:min-h-[100vh] flex flex-col lg:flex-row items-center overflow-hidden py-8 lg:py-0">
         <Image
           src="/resturents-hero.jpg" // Placeholder, consider a pizza/food image similar to the example
           alt="Delicious Food"
           fill
-          className="object-cover object-right opacity-30" // Adjust opacity and object position as needed
+          className="object-cover object-center lg:object-right opacity-30"
           priority
         />
-        <div className="container mx-auto px-4 z-10 flex flex-col lg:flex-row items-center lg:justify-between">
+        <div className="container mx-auto px-4 z-10 flex flex-col lg:flex-row items-center lg:justify-between h-full w-full">
           {/* Left Content */}
-          <div className="lg:w-1/2 text-center lg:text-left mb-8 lg:mb-0">
+          <div className="w-full lg:w-1/2 text-center lg:text-left mb-8 lg:mb-0 flex flex-col justify-center items-center lg:items-start">
             <h1 className="text-4xl md:text-6xl font-bold mb-4 text-[#ffc107]">There is no Loyal Love than The Love of Food.</h1>
             <p className="text-lg md:text-xl mb-6 max-w-md lg:max-w-none mx-auto lg:mx-0">
               Good food basically that we have in our plate is a result of immense amount of hard work that is put at various stages.... Consume it with utmost respect.
@@ -145,8 +145,8 @@ export default function RestaurantPage() {
             </div>
           </div>
           {/* Right Image Placeholder (Optional, if you want a separate image on the right like the example) */}
-          <div className="lg:w-1/2 flex justify-center lg:justify-end mt-8 lg:mt-0">
-            <div className="w-64 h-64 rounded-full overflow-hidden shadow-lg border-4 border-[#ffc107] bg-white flex items-center justify-center">
+          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end mt-8 lg:mt-0">
+            <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden shadow-lg border-4 border-[#ffc107] bg-white flex items-center justify-center">
               <Image
                 src="/food-drink.jpg" // Make sure this file is in your public directory
                 alt="Food and Drink"
