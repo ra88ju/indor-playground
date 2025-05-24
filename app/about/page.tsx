@@ -5,22 +5,22 @@ import { motion } from "framer-motion";
 
 const team = [
   {
-    name: "John Smith",
+    name: "MD. MASUM ",
     role: "Founder & CEO",
     bio: "With over 20 years of experience in sports management, John founded IndoorX Arena to create a premier indoor sports facility.",
-    image: "/team/john.jpg",
+    image: "/team/masum.jpg",
   },
   {
-    name: "Sarah Johnson",
+    name: "MD.MOMINUL",
     role: "Facility Manager",
     bio: "Sarah ensures smooth operations and maintains the highest standards of facility management.",
-    image: "/team/sarah.jpg",
+    image: "/team/mominul.jpg",
   },
   {
-    name: "Mike Chen",
+    name: "Tofail Ahamed",
     role: "Sports Coordinator",
     bio: "Mike organizes tournaments and events, bringing the community together through sports.",
-    image: "/team/mike.jpg",
+    image: "/team/tofail.jpg",
   },
 ];
 
@@ -97,9 +97,9 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-neutral-100">
         <div className="container-custom">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Values</h2>
+          <h2 className="text-3xl font-bold text-center text-black mb-12">Our Values</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
               <motion.div
@@ -110,8 +110,8 @@ export default function AboutPage() {
                 className="bg-white p-6 rounded-lg shadow-lg text-center"
               >
                 <div className="text-4xl mb-4">{value.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
-                <p className="text-gray-600">{value.description}</p>
+                <h3 className="text-xl font-semibold mb-2 text-black">{value.title}</h3>
+                <p className="text-black">{value.description}</p>
               </motion.div>
             ))}
           </div>

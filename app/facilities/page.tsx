@@ -7,7 +7,7 @@ import { useState } from "react";
 const facilities = [
   {
     id: "football",
-    name: "Football Arena",
+    name: "Football Field",
     description: "Spacious arena with professional turf and lighting, perfect for matches and training.",
     features: [
       "FIFA-approved Artificial Turf",
