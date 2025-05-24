@@ -191,155 +191,163 @@ export default function RestaurantPage() {
   };
 
   return (
-    <main className={`min-h-screen transition-colors duration-700 ${bgGradient}`}>
-      {/* Enhanced Hero Section */}
-      <section className="relative min-h-[80vh] lg:min-h-[120vh] flex items-center overflow-hidden">
-      {/* Background Image with Gradient Overlay */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/resturents-hero.jpg"
-            alt="Restaurant Hero"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
-        </div>
-        
-        {/* Content Container */}
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto">
-            {/* Main Content Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-2xl border border-white/20"
-            >
+    <>
+      <style jsx global>{`
+        html {
+          scroll-behavior: smooth;
+        }
+      `}</style>
+      <main className={`min-h-screen transition-colors duration-700 ${bgGradient}`}>
+        {/* Enhanced Hero Section */}
+        <section className="relative min-h-[80vh] lg:min-h-[120vh] flex items-center overflow-hidden">
+          {/* Background Image with Gradient Overlay */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/resturents-hero.jpg"
+              alt="Restaurant Hero"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
+          </div>
+          
+          {/* Content Container */}
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-4xl mx-auto">
+              {/* Main Content Card */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-                className="text-center"
+                transition={{ duration: 0.8 }}
+                className="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-2xl border border-white/20"
               >
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                  Experience Culinary Excellence
-                </h1>
-                <p className="text-lg md:text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
-                  Discover our carefully curated menu featuring the finest local and international cuisines
-                </p>
-                
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={scrollToMenu}
-                    className="px-8 py-4 bg-blue-600 text-white rounded-full text-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto"
-                  >
-                    View Menu
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full text-lg font-semibold hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl border border-white/20 w-full sm:w-auto"
-                  >
-                    Make Reservation
-                  </motion.button>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Floating Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-              {[
-                { label: "Menu Items", value: "50+" },
-                { label: "Daily Specials", value: "10+" },
-                { label: "Happy Hours", value: "4-7 PM" },
-                { label: "Rating", value: "4.8" }
-              ].map((stat, index) => (
                 <motion.div
-                  key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
-                  className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-center border border-white/20 shadow-lg"
+                  transition={{ delay: 0.2, duration: 0.8 }}
+                  className="text-center"
                 >
-                  <div className="text-2xl md:text-3xl font-bold text-black mb-1">{stat.value}</div>
-                  <div className="text-sm text-gray-700">{stat.label}</div>
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    Experience Culinary Excellence
+                  </h1>
+                  <p className="text-lg md:text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
+                    Discover our carefully curated menu featuring the finest local and international cuisines
+                  </p>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={scrollToMenu}
+                      className="px-8 py-4 bg-blue-600 text-white rounded-full text-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto"
+                    >
+                      View Menu
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full text-lg font-semibold hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl border border-white/20 w-full sm:w-auto"
+                    >
+                      Make Reservation
+                    </motion.button>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Floating Stats Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                {[
+                  { label: "Menu Items", value: "50+" },
+                  { label: "Daily Specials", value: "10+" },
+                  { label: "Happy Hours", value: "4-7 PM" },
+                  { label: "Rating", value: "4.8" }
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                    className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-center border border-white/20 shadow-lg"
+                  >
+                    <div className="text-2xl md:text-3xl font-bold text-black mb-1">{stat.value}</div>
+                    <div className="text-sm text-gray-700">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Decorative Elements */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent" />
+        </section>
+
+        {/* Menu Section */}
+        <section ref={menuSectionRef} className="py-16 md:py-24">
+          <div className="container mx-auto px-4">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900"
+            >
+              Our Menu
+            </motion.h2>
+            
+            <div className="space-y-16">
+              {restaurantSections.map((section, sectionIndex) => (
+                <motion.div
+                  key={section.category}
+                  id={section.category === "Juice Bar" ? "juice-bar" : undefined}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: sectionIndex * 0.2 }}
+                  className={`border-b border-gray-200 pb-12 last:border-b-0 ${section.category === 'Juice Bar' ? 'rounded-3xl bg-white/30 backdrop-blur-md shadow-2xl border border-blue-200/40 p-6 md:p-10 my-8' : ''}`}
+                >
+                  <div className="flex items-center gap-3 mb-8">
+                    {section.category === 'Juice Bar' ? (
+                      <div className="flex items-center gap-4 w-full">
+                        <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-blue-200 via-cyan-200 to-green-200 shadow-lg border-2 border-white text-3xl md:text-4xl">
+                          {section.icon}
+                        </span>
+                        <div className="flex flex-col">
+                          <h3 className="text-3xl md:text-4xl font-extrabold text-blue-900 tracking-tight">{section.category}</h3>
+                          <span className="text-base md:text-lg text-blue-700 font-medium mt-1">Freshly Squeezed & Blended</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="text-4xl">{section.icon}</span>
+                        <h3 className="text-2xl md:text-3xl font-bold text-gray-900">{section.category}</h3>
+                      </>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {section.items.map((item) => (
+                      <MenuCard key={item.name} item={item} />
+                    ))}
+                  </div>
                 </motion.div>
               ))}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Decorative Elements */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent" />
-      </section>
-
-      {/* Menu Section */}
-      <section ref={menuSectionRef} className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900"
-          >
-            Our Menu
-          </motion.h2>
-          
-          <div className="space-y-16">
-            {restaurantSections.map((section, sectionIndex) => (
-              <motion.div
-                key={section.category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: sectionIndex * 0.2 }}
-                className={`border-b border-gray-200 pb-12 last:border-b-0 ${section.category === 'Juice Bar' ? 'rounded-3xl bg-white/30 backdrop-blur-md shadow-2xl border border-blue-200/40 p-6 md:p-10 my-8' : ''}`}
-              >
-                <div className="flex items-center gap-3 mb-8">
-                  {section.category === 'Juice Bar' ? (
-                    <div className="flex items-center gap-4 w-full">
-                      <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-blue-200 via-cyan-200 to-green-200 shadow-lg border-2 border-white text-3xl md:text-4xl">
-                        {section.icon}
-                      </span>
-                      <div className="flex flex-col">
-                        <h3 className="text-3xl md:text-4xl font-extrabold text-blue-900 tracking-tight">{section.category}</h3>
-                        <span className="text-base md:text-lg text-blue-700 font-medium mt-1">Freshly Squeezed & Blended</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <span className="text-4xl">{section.icon}</span>
-                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900">{section.category}</h3>
-                    </>
-                  )}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                  {section.items.map((item) => (
-                    <MenuCard key={item.name} item={item} />
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Back to Top Button */}
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-6 right-6 bg-blue-600 text-white rounded-full p-3 shadow-lg hover:bg-blue-700 transition-colors z-50"
-        aria-label="Back to Top"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-        </svg>
-      </motion.button>
-    </main>
+        {/* Back to Top Button */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 bg-blue-600 text-white rounded-full p-3 shadow-lg hover:bg-blue-700 transition-colors z-50"
+          aria-label="Back to Top"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+          </svg>
+        </motion.button>
+      </main>
+    </>
   );
 } 
