@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center">
+      <section className="relative min-h-[60vh] lg:min-h-[100vh] flex flex-col items-center justify-center py-8 lg:py-0">
         <div className="absolute inset-0 z-0">
           <Image
             src="/hero-bg.jpg"

@@ -51,7 +51,7 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen pt-20">
       {/* Hero Section */}
-      <section className="relative h-[40vh] flex items-center justify-center">
+      <section className="relative min-h-[40vh] lg:min-h-[60vh] flex flex-col items-center justify-center py-8 lg:py-0">
         <div className="absolute inset-0 z-0">
           <Image
             src="/about-hero.jpg"
