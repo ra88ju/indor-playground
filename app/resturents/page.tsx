@@ -106,7 +106,7 @@ export default function RestaurantPage() {
   return (
     <main className="min-h-screen bg-[#1a1a1a] text-white">
       {/* Hero Section - Inspired by the image */}
-      <section className="relative h-[100vh] flex items-center overflow-hidden">
+      <section className="relative h-[106vh] flex items-center overflow-hidden">
         <Image
           src="/resturents-hero.jpg" // Placeholder, consider a pizza/food image similar to the example
           alt="Delicious Food"
