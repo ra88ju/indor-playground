@@ -82,10 +82,10 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-2 text-gray-400">
-              <li>123 Sports Avenue</li>
-              <li>City, State 12345</li>
-              <li>Phone: +1 (555) 123-4567</li>
-              <li>Email: info@indoorxarena.com</li>
+              <li>Sports ground, Rajshahi</li>
+              <li>Rajshahi, Bangladesh</li>
+              <li>Phone: +8801717171717</li>
+              <li>Email: indoorparkrajshahi@gmail.com</li>
             </ul>
           </div>
         </div>
