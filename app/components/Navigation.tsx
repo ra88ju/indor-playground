@@ -42,141 +42,72 @@ export default function Navigation() {
   }, [restaurantDropdownOpen]);
 
   return (
-    <header className="fixed w-full bg-white/70 backdrop-blur-sm z-50 shadow-sm py-2">
+    <header className="fixed w-full bg-white z-50 shadow-sm py-2">
       <nav className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex lg:flex-1">
-            <Link href="/" className="-m-1.5 p-1.5">
-              <span className="text-2xl font-bold text-blue-600">Indoor Park Rjshahi</span>
+        <div className="flex h-14 items-center justify-between">
+          <div className="flex-1 flex items-center justify-start">
+            <Link href="/" className="p-1.5">
+              <span className="font-extrabold text-blue-600 tracking-tight text-xl">Indoor Park Rjshahi</span>
             </Link>
           </div>
           <div className="flex lg:hidden">
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+              className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
               onClick={() => setMobileMenuOpen(true)}
             >
               <span className="sr-only">Open main menu</span>
-              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+              <Bars3Icon className="h-7 w-7" aria-hidden="true" />
             </button>
           </div>
-          <div className="hidden lg:flex lg:gap-x-12">
-            {navigation.map((item) =>
-              item.name === "Restaurant" ? (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
-                >
-                  {item.name}
-                </Link>
-              ) : item.name.trim() === "Slot" ? (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
-                >
-                  {item.name}
-                </Link>
-              ) : (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors"
-                >
-                  {item.name}
-                </Link>
-              )
-            )}
+          <div className="hidden lg:flex lg:gap-x-10 xl:gap-x-14">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors text-base xl:text-lg px-2 xl:px-4 py-1 rounded-lg hover:bg-blue-50"
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <div className="hidden lg:flex flex-1 justify-end">
             <Link
               href="/booking"
-              className="btn-primary text-sm"
+              className="btn-primary text-base xl:text-lg px-6 py-2"
             >
               Book Now
             </Link>
           </div>
         </div>
-        {/* Mobile menu */}
-        <div className={`lg:hidden ${mobileMenuOpen ? "fixed inset-0 z-50" : "hidden"}`}>
-          <div className="fixed inset-0 bg-gray-100" aria-hidden="true" />
-          <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-            <div className="flex items-center justify-between">
-              <Link href="/" className="-m-1.5 p-1.5">
-                <span className="text-2xl font-bold text-blue-600">Indoor Park Rajshahi</span>
-              </Link>
-              <button
-                type="button"
-                className="-m-2.5 rounded-md p-2.5 text-gray-700"
+        {/* Simple Mobile menu */}
+        <div className={`lg:hidden fixed inset-0 z-50 bg-white transition-transform duration-300 ${mobileMenuOpen ? '' : 'hidden'}`}>
+          <div className="flex flex-col h-full w-full items-center justify-center gap-8">
+            <button
+              type="button"
+              className="absolute top-4 right-4 rounded-full p-2 text-gray-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              <XMarkIcon className="h-8 w-8" aria-hidden="true" />
+            </button>
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-2xl font-semibold text-gray-800 hover:text-blue-600"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span className="sr-only">Close menu</span>
-                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-              </button>
-            </div>
-            <div className="mt-6 flow-root">
-              <div className="-my-6 divide-y divide-gray-500/10">
-                <div className="space-y-2 py-6">
-                  {navigation.map((item) =>
-                    item.name === "Restaurant" ? (
-                      <div key={item.name}>
-                        <button
-                          className="-mx-3 w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 focus:outline-none"
-                          onClick={() => setRestaurantDropdownOpen((open) => !open)}
-                          type="button"
-                          aria-haspopup="true"
-                          aria-expanded={restaurantDropdownOpen}
-                        >
-                          {item.name}
-                          <svg className={`w-4 h-4 ml-2 transition-transform ${restaurantDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                        {restaurantDropdownOpen && (
-                          <div className="pl-4 flex flex-col gap-2">
-                            <Link href="/resturents" className="block py-2 text-gray-800 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>
-                              Our Menu
-                            </Link>
-                            <Link href="/resturents#juice-bar" className="block py-2 text-gray-800 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>
-                              Juice Bar
-                            </Link>
-                            <Link href="/resturents#reservation" className="block py-2 text-gray-800 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>
-                              Reservation
-                            </Link>
-                          </div>
-                        )}
-                      </div>
-                    ) : item.name.trim() === "Slot" ? (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ) : (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    )
-                  )}
-                </div>
-                <div className="py-6">
-                  <Link
-                    href="/booking"
-                    className="btn-primary block text-center"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Book Now
-                  </Link>
-                </div>
-              </div>
-            </div>
+                {item.name}
+              </Link>
+            ))}
+            <Link
+              href="/booking"
+              className="mt-8 text-xl font-bold text-white bg-blue-600 px-8 py-3 rounded-lg shadow hover:bg-blue-700"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Book Now
+            </Link>
           </div>
         </div>
       </nav>
