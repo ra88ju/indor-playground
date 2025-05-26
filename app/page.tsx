@@ -16,7 +16,7 @@ const facilities = [
     title: "Footbal",
     description: "FIFA-approved artificial turf for the perfect playing experience",
     icon: "⚽",
-    image: "/facilities/futsal.jpg"
+    image: "/facilities/football.jpg"
   },
   // cricket
   {
