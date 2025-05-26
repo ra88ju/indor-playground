@@ -24,7 +24,7 @@ const initialFacilities: Facility[] = [
   {
     title: "Footbal",
     icon: "⚽",
-    image: "/facilities/futsal.jpg",
+    image: "/facilities/football.jpg",
     slots: [
       { time: "08:00 - 09:00", status: "free" },
       { time: "09:00 - 10:00", status: "free" },
