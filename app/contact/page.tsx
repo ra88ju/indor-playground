@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 
 type FormData = {
   name: string;
@@ -30,92 +31,85 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen pt-20 bg-gray-900">
+    <main className="min-h-screen pt-20 bg-gray-200">
       <div className="container-custom py-12">
-        <div className="max-w-4xl mx-auto">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-center mb-12 text-white"
-          >
-            Contact Us
-          </motion.h1>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Contact Information */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="space-y-6 bg-black p-8 rounded-xl border border-white/10"
-            >
-              <div>
-                <h2 className="text-2xl font-semibold mb-4 text-white">Get in Touch</h2>
-                <p className="text-gray-400 mb-6">
-                  Have questions about our facilities or booking? We're here to help!
-                </p>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Left Card: Info */}
+          <div className="bg-white rounded-2xl shadow-lg flex flex-col p-0">
+            <div className="rounded-t-2xl bg-white py-4 px-6 flex items-center justify-center">
+              <h1 className="text-2xl md:text-3xl font-bold text-center text-blue-900 tracking-wide">GET IN TOUCH WITH US NOW</h1>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 flex-1">
+              {/* Phone */}
+              <div className="bg-indigo-100 rounded-xl p-6 flex flex-col items-center justify-center shadow-none">
+                <FaPhoneAlt className="text-4xl text-blue-900 mb-2" />
+                <div className="font-bold text-xl text-black mb-1">Phone Number</div>
+                <div className="text-black text-lg">01750497069</div>
               </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold text-white">Address</h3>
-                  <p className="text-gray-400">
-                    123 Sports Avenue<br />
-                    City, State 12345<br />
-                    Country
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-white">Phone</h3>
-                  <p className="text-gray-400">+1 (555) 123-4567</p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-white">Email</h3>
-                  <p className="text-gray-400">info@indoorxarena.com</p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-white">Business Hours</h3>
-                  <p className="text-gray-400">
-                    Monday - Friday: 6:00 AM - 10:00 PM<br />
-                    Saturday - Sunday: 8:00 AM - 8:00 PM
-                  </p>
-                </div>
+              {/* Email */}
+              <div className="bg-indigo-100 rounded-xl p-6 flex flex-col items-center justify-center shadow-none">
+                <FaEnvelope className="text-4xl text-blue-900 mb-2" />
+                <div className="font-bold text-xl text-black mb-1">Email</div>
+                <div className="text-black text-lg">indorparkbd@gmail.com</div>
               </div>
-            </motion.div>
-
-            {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-black p-8 rounded-xl border border-white/10"
-            >
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Location */}
+              <div className="bg-indigo-100 rounded-xl p-6 flex flex-col items-center justify-center shadow-none sm:col-span-1">
+                <FaMapMarkerAlt className="text-4xl text-blue-900 mb-2" />
+                <div className="font-bold text-xl text-black mb-1">Location</div>
+                <div className="text-black text-center text-base">Nader Hazir Mor, Plane Chottor Bypass Road, Rajshahi 6207</div>
+              </div>
+              {/* Service Hours */}
+              <div className="bg-indigo-100 rounded-xl p-6 flex flex-col items-center justify-center shadow-none sm:col-span-1">
+                <FaClock className="text-4xl text-blue-900 mb-2" />
+                <div className="font-bold text-xl text-black mb-1">Service Hours</div>
+                <div className="text-black text-center text-base">Open 24 hours, 7 days a week</div>
+              </div>
+            </div>
+          </div>
+          {/* Right Card: Form */}
+          <div className="bg-white rounded-2xl shadow-lg flex flex-col p-0">
+            <div className="rounded-t-2xl bg-white py-4 px-6 flex items-center justify-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-900 tracking-wide">CONTACT US</h2>
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)} className="p-6 flex-1 flex flex-col justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
-                    Full Name
-                  </label>
+                  <label htmlFor="name" className="block text-base font-semibold text-black mb-1">First Name</label>
                   <input
                     type="text"
                     id="name"
+                    placeholder="Enter your first name"
                     {...register("name", { required: "Name is required" })}
-                    className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                    className="block w-full rounded-lg bg-indigo-100 border-none text-black px-3 py-2 placeholder:text-gray-700 font-medium focus:ring-2 focus:ring-blue-400"
                   />
                   {errors.name && (
                     <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
                   )}
                 </div>
-
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
-                    Email
-                  </label>
+                  <label htmlFor="lastname" className="block text-base font-semibold text-black mb-1">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastname"
+                    placeholder="Enter your last name"
+                    className="block w-full rounded-lg bg-indigo-100 border-none text-black px-3 py-2 placeholder:text-gray-700 font-medium focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="number" className="block text-base font-semibold text-black mb-1">Number</label>
+                  <input
+                    type="text"
+                    id="number"
+                    placeholder="Enter your number"
+                    className="block w-full rounded-lg bg-indigo-100 border-none text-black px-3 py-2 placeholder:text-gray-700 font-medium focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-base font-semibold text-black mb-1">Email</label>
                   <input
                     type="email"
                     id="email"
+                    placeholder="Enter your email"
                     {...register("email", {
                       required: "Email is required",
                       pattern: {
@@ -123,55 +117,34 @@ export default function ContactPage() {
                         message: "Invalid email address",
                       },
                     })}
-                    className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                    className="block w-full rounded-lg bg-indigo-100 border-none text-black px-3 py-2 placeholder:text-gray-700 font-medium focus:ring-2 focus:ring-blue-400"
                   />
                   {errors.email && (
                     <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
                   )}
                 </div>
-
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-white mb-2">
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    {...register("subject", { required: "Subject is required" })}
-                    className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
-                  />
-                  {errors.subject && (
-                    <p className="mt-1 text-sm text-red-500">{errors.subject.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-white mb-2">
-                    Message
-                  </label>
+                <div className="md:col-span-2">
+                  <label htmlFor="message" className="block text-base font-semibold text-black mb-1">Message</label>
                   <textarea
                     id="message"
                     rows={4}
+                    placeholder="Message"
                     {...register("message", { required: "Message is required" })}
-                    className="mt-1 block w-full rounded-lg bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500"
+                    className="block w-full rounded-lg bg-indigo-100 border-none text-black px-3 py-2 placeholder:text-gray-700 font-medium focus:ring-2 focus:ring-blue-400"
                   />
                   {errors.message && (
                     <p className="mt-1 text-sm text-red-500">{errors.message.message}</p>
                   )}
                 </div>
-
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 px-6 bg-blue-600 text-white rounded-lg font-semibold
-                           hover:bg-blue-700 transition-colors duration-300"
-                >
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </motion.button>
-              </form>
-            </motion.div>
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-3 px-6 bg-yellow-300 text-black rounded-lg font-bold text-xl hover:bg-yellow-400 transition-colors duration-300 mt-6"
+              >
+                {isSubmitting ? "Sending..." : "Submit"}
+              </button>
+            </form>
           </div>
         </div>
       </div>

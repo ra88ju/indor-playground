@@ -42,8 +42,8 @@ export default function Navigation() {
   }, [restaurantDropdownOpen]);
 
   return (
-    <header className="fixed w-full bg-white z-50 shadow-sm py-2">
-      <nav className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
+    <header className="fixed w-full z-50 shadow-sm py-2 bg-white/90 backdrop-blur-sm top-1 left-0 right-0 max-w-screen-xl mx-auto rounded-xl">
+      <nav className="w-full px-4 sm:px-6 lg:px-8" aria-label="Global">
         <div className="flex h-14 items-center justify-between">
           <div className="flex-1 flex items-center justify-start">
             <Link href="/" className="p-1.5">

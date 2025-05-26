@@ -7,9 +7,6 @@ const navigation = {
     { name: "About", href: "/about" },
     { name: "Facilities", href: "/facilities" },
     { name: "Booking", href: "/booking" },
-    { name: "Gallery", href: "/Resturents" },
-    { name: "Events", href: "/events" },
-    { name: "Contact", href: "/contact" },
   ],
   social: [
     {
@@ -37,8 +34,8 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container-custom py-12">
+    <footer className="bg-black text-white">
+      <div className="container-custom py-10 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand Section */}
           <div>
