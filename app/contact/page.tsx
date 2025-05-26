@@ -146,6 +146,18 @@ export default function ContactPage() {
               </button>
             </form>
           </div>
+          {/* Google Map */}
+          <div className="mt-12 rounded-2xl shadow-lg overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps?q=Nader+Hazir+Mor,+Plane+Chottor+Bypass+Road,+Rajshahi+6207&hl=en&z=14&output=embed"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
         </div>
       </div>
     </main>
