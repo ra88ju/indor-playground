@@ -61,7 +61,7 @@ const specialOffers = [
 
 export default function EventsPage() {
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-20 bg-gray-500">
       <div className="container-custom py-12">
         {/* Upcoming Events */}
         <section className="mb-16">

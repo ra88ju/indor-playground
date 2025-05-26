@@ -102,7 +102,7 @@ export default function SlotPage() {
   };
 
   return (
-    <main className="min-h-screen pt-20 bg-gray-900">
+    <main className="min-h-screen pt-20 bg-gray-500">
       {/* Slot Section Content - Display Facility Cards */}
       <section className="section-padding">
         <div className="container-custom">
