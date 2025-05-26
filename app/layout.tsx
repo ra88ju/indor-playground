@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Indoor Park Rajshahi",
-  description: "Welcome to IndoorX Arena, your premier destination for indoor sports and recreation. Book your game now!",
+  description: "Welcome to Indoor Park Rajshahi, your premier destination for indoor sports and recreation. Book your game now!",
 };
 
 export default function RootLayout({

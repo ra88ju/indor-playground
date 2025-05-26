@@ -39,6 +39,13 @@ const facilities = [
     icon: "🏊‍♂️",
     image: "/facilities/swimmingpool.jpg" // Use a placeholder or add your own image
   },
+  // RC Car
+  {
+    title: "RC Car",
+    description: "State-of-the-art gym equipment for all fitness levels",
+    icon: "🏋️‍♂️",
+    image: "/facilities/rc.jpg" // Use a placeholder or add your own image
+  },
 ];
 
 export default function Home() {
@@ -65,9 +72,7 @@ export default function Home() {
         <div className="relative z-20 w-full text-center">
           <h1 className="text-5xl font-bold text-white">Welcome to Indoor Sports Ground</h1>
           <p className="text-2xl text-white mt-4">Your Ultimate Indoor Sports Experience</p>
-          <button className="mt-8 px-8 py-4 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-            Book Your Game Now
-          </button>
+      
         </div>
       </section>
 

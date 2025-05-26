@@ -15,7 +15,7 @@ const restaurantSections = [
         name: "Bhuna Khichuri", 
         description: "A delicious mix of rice and lentils with meat", 
         price: "৳250",
-        image: "/resturents/bhuna-khichuri.jpg"
+        image: "/resturents/khichuri.jpg"
       },
       { 
         name: "Panta Ilish", 

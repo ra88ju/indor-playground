@@ -47,7 +47,7 @@ export default function Navigation() {
         <div className="flex h-14 items-center justify-between">
           <div className="flex-1 flex items-center justify-start">
             <Link href="/" className="p-1.5">
-              <span className="font-extrabold text-blue-600 tracking-tight text-xl">Indoor Park Rjshahi</span>
+              <span className="font-extrabold text-blue-600 tracking-tight text-xl">Indoor Park</span>
             </Link>
           </div>
           <div className="flex lg:hidden">
