@@ -102,14 +102,14 @@ export default function SlotPage() {
   };
 
   return (
-    <main className="min-h-screen pt-20 bg-gray-500">
+    <main className="min-h-screen pt-20 bg-gray-200">
       {/* Slot Section Content - Display Facility Cards */}
       <section className="section-padding">
         <div className="container-custom">
-          <h1 className="text-4xl font-bold text-center mb-12 text-white">Book Your Slot</h1>
+          <h1 className="text-4xl font-bold text-black text-center mb-12 ">Book Your Slot</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {facilitySlots.map((facility) => (
-              <div key={facility.title} className="relative h-[350px] group rounded-xl overflow-hidden shadow-xl transition-all duration-300 hover:scale-[1.02]">
+              <div key={facility.title} className="relative h-[350px] group rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
                 {/* Background Image */}
                 <Image
                   src={facility.image}

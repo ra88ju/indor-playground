@@ -81,27 +81,38 @@ export default function Navigation() {
           </div>
         </div>
         {/* Simple Mobile menu */}
-        <div className={`lg:hidden fixed inset-0 z-50 bg-black transition-transform duration-300 ${mobileMenuOpen ? '' : 'translate-x-full'}`}>
-          <div className="flex flex-col w-full h-screen items-start pt-16 pb-8 px-8 overflow-y-auto">
-            <button
-              type="button"
-              className="absolute top-4 right-4 rounded-full p-2 text-gray-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              onClick={() => setMobileMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              <XMarkIcon className="h-8 w-8" aria-hidden="true" />
-            </button>
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="block w-full text-left py-3 text-xl font-semibold text-white hover:text-blue-400"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item.name}
+        <div className={`lg:hidden fixed inset-0 z-50 bg-black transition-all duration-300 ease-in-out ${
+          mobileMenuOpen 
+            ? 'max-h-screen opacity-100 visible' 
+            : 'max-h-0 opacity-0 invisible'
+        }`}>
+          <div className="flex flex-col w-full h-screen pt-8 pb-6 px-6 overflow-y-auto">
+            <div className="flex items-center justify-between pb-8">
+              <Link href="/" className="p-1.5">
+                <span className="font-extrabold text-white tracking-tight text-2xl">Indoor Park</span>
               </Link>
-            ))}
-            <div className="w-full mt-auto pt-8 pb-4 shrink-0">
+              <button
+                type="button"
+                className="rounded-full p-2 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <XMarkIcon className="h-8 w-8" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="flex flex-col w-full gap-y-3">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="block w-full text-left py-2 text-lg font-semibold text-white hover:text-blue-400"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+            <div className="w-full mt-auto pt-6 pb-4 shrink-0">
               <Link
                 href="/booking"
                 className="block w-full text-center text-lg font-bold text-white border-2 border-white px-8 py-3 rounded-lg hover:bg-white hover:text-black transition-colors"

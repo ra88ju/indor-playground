@@ -61,11 +61,11 @@ const specialOffers = [
 
 export default function EventsPage() {
   return (
-    <main className="min-h-screen pt-20 bg-gray-500">
+    <main className="min-h-screen pt-20 bg-gray-200">
       <div className="container-custom py-12">
         {/* Upcoming Events */}
         <section className="mb-16">
-          <h1 className="text-4xl font-bold text-center mb-12">Upcoming Events</h1>
+          <h1 className="text-4xl font-bold text-black text-center mb-12">Upcoming Events</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {upcomingEvents.map((event, index) => (
               <motion.div
@@ -73,7 +73,7 @@ export default function EventsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-lg shadow-lg overflow-hidden"
+                className="bg-white rounded-lg shadow-md overflow-hidden"
               >
                 <div className="p-6">
                   <div className="mb-4">
@@ -97,7 +97,7 @@ export default function EventsPage() {
 
         {/* Special Offers */}
         <section>
-          <h2 className="text-3xl font-bold text-center mb-12">Special Offers</h2>
+          <h2 className="text-3xl font-bold text-black text-center mb-12">Special Offers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {specialOffers.map((offer, index) => (
               <motion.div
@@ -105,7 +105,7 @@ export default function EventsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gradient-to-br from-blue-50 to-white rounded-lg shadow-lg p-6"
+                className="bg-gradient-to-br from-blue-50 to-white rounded-lg shadow-md p-6"
               >
                 <div className="text-4xl font-bold text-blue-600 mb-4">
                   {offer.discount}

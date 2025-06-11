@@ -96,7 +96,7 @@ export default function FacilitiesPage() {
   };
 
   return (
-    <main className="min-h-screen pt-20 bg-gray-500">
+    <main className="min-h-screen pt-20 bg-gray-200">
       <div className="container-custom py-12">
         <h1 className="text-4xl font-bold text-center mb-12">Our Facilities</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -111,7 +111,7 @@ export default function FacilitiesPage() {
                 transition: { duration: 0.2 }
               }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 flex flex-col"
+              className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col"
             >
               <div className="relative w-full aspect-[16/9] bg-gray-100">
                 <Image

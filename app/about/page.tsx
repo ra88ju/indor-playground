@@ -49,7 +49,7 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen pt-20 bg-gray-500">
+    <main className="min-h-screen pt-20 bg-gray-200">
       {/* Hero Section */}
       <section className="relative min-h-[40vh] lg:min-h-[60vh] flex flex-col items-center justify-center py-8 lg:py-0">
         <div className="absolute inset-0 z-0">
