@@ -7,7 +7,15 @@ import { useRouter } from 'next/navigation'; // Import useRouter
 
 // Types - Define these here or import from a shared types file if you have one
 type Slot = { time: string; status: string };
-type Facility = { title: string; icon: string; image: string; slots: Slot[] };
+type Facility = { 
+  title: string; 
+  icon: string; 
+  image: string; 
+  slots: Slot[];
+  isPremium?: boolean;
+  description?: string;
+  price?: string;
+};
 
 // Define the initial facilities data here, or fetch it from an API
 const initialFacilities: Facility[] = [
@@ -15,6 +23,9 @@ const initialFacilities: Facility[] = [
     title: "Badminton",
     icon: "🏸",
     image: "/facilities/badminton.jpg",
+    isPremium: true,
+    description: "Professional-grade courts with premium flooring",
+    price: "₹800/hour",
     slots: [
       { time: "08:00 - 09:00", status: "free" },
       { time: "09:00 - 10:00", status: "booked" },
@@ -25,6 +36,9 @@ const initialFacilities: Facility[] = [
     title: "Footbal",
     icon: "⚽",
     image: "/facilities/football.jpg",
+    isPremium: true,
+    description: "FIFA-standard artificial turf",
+    price: "₹1200/hour",
     slots: [
       { time: "08:00 - 09:00", status: "free" },
       { time: "09:00 - 10:00", status: "free" },
@@ -35,6 +49,9 @@ const initialFacilities: Facility[] = [
     title: "Cricket",
     icon: "🏏",
     image: "/facilities/cricket.jpg",
+    isPremium: true,
+    description: "Professional cricket nets with bowling machines",
+    price: "₹1000/hour",
     slots: [
       { time: "08:00 - 09:00", status: "booked" },
       { time: "09:00 - 10:00", status: "free" },
@@ -45,6 +62,9 @@ const initialFacilities: Facility[] = [
     title: "Kid Zone",
     icon: "🧸",
     image: "/facilities/kidzone.jpg",
+    isPremium: true,
+    description: "Safe and engaging play area with supervision",
+    price: "₹500/hour",
     slots: [
       { time: "10:00 - 11:00", status: "free" },
       { time: "11:00 - 12:00", status: "free" },
@@ -54,6 +74,9 @@ const initialFacilities: Facility[] = [
     title: "Swimming Pool",
     icon: "🏊‍♂️",
     image: "/facilities/swimmingpool.jpg",
+    isPremium: true,
+    description: "Olympic-size pool with temperature control",
+    price: "₹1500/hour",
     slots: [
       { time: "08:00 - 09:00", status: "free" },
       { time: "09:00 - 10:00", status: "booked" },
@@ -109,7 +132,7 @@ export default function SlotPage() {
           <h1 className="text-4xl font-bold text-black text-center mb-12 ">Book Your Slot</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {facilitySlots.map((facility) => (
-              <div key={facility.title} className="relative h-[350px] group rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+              <div key={facility.title} className="relative h-[400px] group rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
                 {/* Background Image */}
                 <Image
                   src={facility.image}
@@ -117,8 +140,14 @@ export default function SlotPage() {
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-110 brightness-50 group-hover:brightness-75"
                 />
+                {/* Premium Badge */}
+                {facility.isPremium && (
+                  <div className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                    Premium
+                  </div>
+                )}
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                 {/* Content */}
                 <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
                   <div className="transform transition-transform duration-300 group-hover:translate-y-0 translate-y-4 opacity-0 group-hover:opacity-100">
@@ -126,8 +155,10 @@ export default function SlotPage() {
                       <span className="text-4xl drop-shadow-lg">{facility.icon}</span>
                       <h3 className="text-3xl font-bold drop-shadow-lg">{facility.title}</h3>
                     </div>
+                    <p className="text-gray-200 mb-3 text-sm">{facility.description}</p>
+                    <p className="text-yellow-400 font-semibold mb-4">{facility.price}</p>
                     <button
-                      className="inline-block px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-lg hover:shadow-xl"
+                      className="inline-block w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                       onClick={() => handleViewSlots(facility)}
                     >
                       View Available Slots

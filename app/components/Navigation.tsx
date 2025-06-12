@@ -21,6 +21,16 @@ export default function Navigation() {
   const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
   const [foodSubmenuOpen, setFoodSubmenuOpen] = useState("");
   const restaurantRef = useRef<HTMLDivElement>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Click-away handler to close dropdown
   useEffect(() => {
@@ -41,81 +51,135 @@ export default function Navigation() {
     };
   }, [restaurantDropdownOpen]);
 
+  // Close mobile menu when window is resized to desktop size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024 && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [mobileMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   return (
-    <header className="fixed w-full z-50 shadow-sm py-2 bg-white/90 backdrop-blur-sm top-1 left-0 right-0 max-w-screen-xl mx-auto rounded-xl">
-      <nav className="w-full px-4 sm:px-6 lg:px-8" aria-label="Global">
+    <header 
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        isScrolled 
+          ? 'py-2 bg-white/95 shadow-lg backdrop-blur-lg' 
+          : 'py-4 bg-white/80 backdrop-blur-sm'
+      } left-0 right-0`}
+    >
+      <nav className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
         <div className="flex h-14 items-center justify-between">
           <div className="flex-1 flex items-center justify-start">
-            <Link href="/" className="p-1.5">
-              <span className="font-extrabold text-blue-600 tracking-tight text-xl">Indoor Park</span>
+            <Link 
+              href="/" 
+              className="group p-1.5 transition-transform duration-200 ease-out hover:scale-105"
+            >
+              <span className="font-extrabold text-blue-600 tracking-tight text-lg sm:text-xl lg:text-2xl group-hover:text-blue-700 transition-colors">
+                Indoor Park
+              </span>
             </Link>
           </div>
           <div className="flex lg:hidden">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="inline-flex items-center justify-center rounded-lg p-2.5 text-gray-700 hover:bg-blue-100/80 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 transition-all"
               onClick={() => setMobileMenuOpen(true)}
             >
               <span className="sr-only">Open main menu</span>
-              <Bars3Icon className="h-7 w-7" aria-hidden="true" />
+              <Bars3Icon className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden="true" />
             </button>
           </div>
-          <div className="hidden lg:flex lg:gap-x-10 xl:gap-x-14">
+          <div className="hidden lg:flex lg:gap-x-1 xl:gap-x-2 items-center">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="font-semibold leading-6 text-gray-900 hover:text-blue-600 transition-colors text-base xl:text-lg px-2 xl:px-4 py-1 rounded-lg hover:bg-blue-50"
+                className="relative font-semibold text-gray-900 hover:text-blue-600 transition-all text-sm lg:text-base xl:text-lg px-3 xl:px-4 py-2 rounded-lg hover:bg-blue-50 group"
               >
-                {item.name}
+                <span className="relative z-10">{item.name}</span>
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 transform origin-left scale-x-0 transition-transform group-hover:scale-x-100"></span>
               </Link>
             ))}
-          </div>
-          <div className="hidden lg:flex flex-1 justify-end">
             <Link
               href="/booking"
-              className="btn-primary text-base xl:text-lg px-6 py-2"
+              className="ml-4 btn-primary text-sm lg:text-base xl:text-lg px-5 py-2.5 xl:px-6 hover:scale-105 active:scale-100 transition-all shadow-md hover:shadow-lg"
             >
               Book Now
             </Link>
           </div>
         </div>
-        {/* Simple Mobile menu */}
-        <div className={`lg:hidden fixed inset-0 z-50 bg-black transition-all duration-300 ease-in-out ${
-          mobileMenuOpen 
-            ? 'max-h-screen opacity-100 visible' 
-            : 'max-h-0 opacity-0 invisible'
-        }`}>
-          <div className="flex flex-col w-full h-screen pt-8 pb-6 px-6 overflow-y-auto">
+        
+        {/* Mobile menu */}
+        <div 
+          className={`lg:hidden fixed inset-0 z-50 backdrop-blur-lg transition-all duration-500 ease-in-out ${
+            mobileMenuOpen 
+              ? 'opacity-100 visible' 
+              : 'opacity-0 invisible pointer-events-none'
+          }`}
+        >
+          <div 
+            className={`absolute inset-0 bg-gradient-to-b from-blue-900/95 to-black/95 transition-opacity duration-500 ${
+              mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+          <div className={`relative flex flex-col w-full h-full pt-6 pb-6 px-6 overflow-y-auto transform transition-transform duration-500 ${
+            mobileMenuOpen ? 'translate-y-0' : '-translate-y-8'
+          }`}>
             <div className="flex items-center justify-between pb-8">
-              <Link href="/" className="p-1.5">
-                <span className="font-extrabold text-white tracking-tight text-2xl">Indoor Park</span>
+              <Link 
+                href="/" 
+                className="p-1.5 group transition-transform duration-200 ease-out hover:scale-105" 
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span className="font-extrabold text-white tracking-tight text-xl sm:text-2xl lg:text-3xl group-hover:text-blue-400 transition-colors">
+                  Indoor Park
+                </span>
               </Link>
               <button
                 type="button"
-                className="rounded-full p-2 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
+                className="rounded-full p-2.5 text-white/90 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 active:scale-95 transition-all"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Close menu"
               >
-                <XMarkIcon className="h-8 w-8" aria-hidden="true" />
+                <XMarkIcon className="h-7 w-7 sm:h-8 sm:w-8" aria-hidden="true" />
               </button>
             </div>
-            <div className="flex flex-col w-full gap-y-3">
-              {navigation.map((item) => (
+            <div className="flex flex-col w-full space-y-2 mt-4">
+              {navigation.map((item, index) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block w-full text-left py-2 text-lg font-semibold text-white hover:text-blue-400"
+                  className={`transform transition-all duration-300 delay-[${index * 100}ms] ${
+                    mobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
+                  } block w-full text-left py-4 text-base sm:text-lg font-semibold text-white/90 hover:text-white border-b border-white/10 hover:border-white/20 hover:bg-white/5 rounded-lg px-4 backdrop-blur-sm`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
             </div>
-            <div className="w-full mt-auto pt-6 pb-4 shrink-0">
+            <div className="w-full mt-auto pt-8 pb-4 shrink-0">
               <Link
                 href="/booking"
-                className="block w-full text-center text-lg font-bold text-white border-2 border-white px-8 py-3 rounded-lg hover:bg-white hover:text-black transition-colors"
+                className={`transform transition-all duration-300 delay-[800ms] ${
+                  mobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+                } block w-full text-center text-base sm:text-lg font-bold text-white bg-blue-600 hover:bg-blue-700 px-6 py-4 rounded-xl active:scale-95 shadow-lg hover:shadow-xl transition-all`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Book Now
@@ -126,4 +190,4 @@ export default function Navigation() {
       </nav>
     </header>
   );
-} 
+}
