@@ -20,11 +20,25 @@ export default function ContactPage() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      console.log(data);
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send message');
+      }
+
       toast.success("Message sent successfully!");
       reset();
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      console.error('Error sending message:', error);
+      toast.error(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -162,4 +176,4 @@ export default function ContactPage() {
       </div>
     </main>
   );
-} 
+}

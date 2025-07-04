@@ -17,11 +17,9 @@ const navigation = [
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [restaurantDropdownOpen, setRestaurantDropdownOpen] = useState(false);
-  const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
-  const [foodSubmenuOpen, setFoodSubmenuOpen] = useState("");
-  const restaurantRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeLink, setActiveLink] = useState("/");
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   // Handle scroll effect
   useEffect(() => {
@@ -32,16 +30,19 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Click-away handler to close dropdown
+  // Set active link based on current path
+  useEffect(() => {
+    setActiveLink(window.location.pathname);
+  }, []);
+
+  // Click-away handler to close mobile menu
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (restaurantRef.current && !restaurantRef.current.contains(event.target as Node)) {
-        setRestaurantDropdownOpen(false);
-        setMenuDropdownOpen(false);
-        setFoodSubmenuOpen("");
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setMobileMenuOpen(false);
       }
     }
-    if (restaurantDropdownOpen) {
+    if (mobileMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -49,7 +50,7 @@ export default function Navigation() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [restaurantDropdownOpen]);
+  }, [mobileMenuOpen]);
 
   // Close mobile menu when window is resized to desktop size
   useEffect(() => {
@@ -80,7 +81,7 @@ export default function Navigation() {
       className={`fixed w-full z-50 transition-all duration-300 ${
         isScrolled 
           ? 'py-2 bg-white/95 shadow-lg backdrop-blur-lg' 
-          : 'py-4 bg-white/80 backdrop-blur-sm'
+          : 'py-8 px-8 bg-white/80 backdrop-blur-sm'
       } left-0 right-0`}
     >
       <nav className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Global">
@@ -110,10 +111,11 @@ export default function Navigation() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="relative font-semibold text-gray-900 hover:text-blue-600 transition-all text-sm lg:text-base xl:text-lg px-3 xl:px-4 py-2 rounded-lg hover:bg-blue-50 group"
+                className={`relative font-semibold transition-all text-sm lg:text-base xl:text-lg px-3 xl:px-4 py-2 rounded-lg group ${activeLink === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-900 hover:text-blue-600 hover:bg-blue-50'}`}
+                onClick={() => setActiveLink(item.href)}
               >
                 <span className="relative z-10">{item.name}</span>
-                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 transform origin-left scale-x-0 transition-transform group-hover:scale-x-100"></span>
+                <span className={`absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 transform origin-left transition-transform ${activeLink === item.href ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
               </Link>
             ))}
             <Link
@@ -127,7 +129,8 @@ export default function Navigation() {
         
         {/* Mobile menu */}
         <div 
-          className={`lg:hidden fixed inset-0 z-50 backdrop-blur-lg transition-all duration-500 ease-in-out ${
+          ref={mobileMenuRef}
+          className={`lg:hidden fixed inset-0 z-50 backdrop-blur-lg transition-all duration-300 ease-in-out ${
             mobileMenuOpen 
               ? 'opacity-100 visible' 
               : 'opacity-0 invisible pointer-events-none'
@@ -165,10 +168,13 @@ export default function Navigation() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`transform transition-all duration-300 delay-[${index * 100}ms] ${
+                  className={`transform transition-all duration-300 delay-[${index * 50}ms] ${
                     mobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
-                  } block w-full text-left py-4 text-base sm:text-lg font-semibold text-white/90 hover:text-white border-b border-white/10 hover:border-white/20 hover:bg-white/5 rounded-lg px-4 backdrop-blur-sm`}
-                  onClick={() => setMobileMenuOpen(false)}
+                  } block w-full text-left py-4 text-base sm:text-lg font-semibold ${activeLink === item.href ? 'text-white bg-white/10' : 'text-white/90 hover:text-white hover:bg-white/5'} border-b border-white/10 hover:border-white/20 rounded-lg px-4 backdrop-blur-sm`}
+                  onClick={() => {
+                     setActiveLink(item.href);
+                     setMobileMenuOpen(false);
+                   }}
                 >
                   {item.name}
                 </Link>

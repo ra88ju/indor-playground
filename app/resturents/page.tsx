@@ -1,11 +1,24 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
 
-// Restaurant items data with prices (from previous conversation)
+type MenuItem = {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  image: string;
+};
+
+type MenuSection = {
+  category: string;
+  icon: string;
+  items: MenuItem[];
+};
+
 const restaurantSections = [
   {
     category: "Bangla Food",
@@ -350,4 +363,4 @@ export default function RestaurantPage() {
       </main>
     </>
   );
-} 
+}

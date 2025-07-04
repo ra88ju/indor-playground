@@ -36,11 +36,25 @@ export default function BookingPage() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      console.log(data);
+      const response = await fetch('/api/booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit booking request');
+      }
+
       toast.success("Booking request submitted successfully!");
       reset();
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      console.error('Error submitting booking:', error);
+      toast.error(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -233,4 +247,4 @@ export default function BookingPage() {
       </div>
     </main>
   );
-} 
+}

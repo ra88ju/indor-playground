@@ -17,10 +17,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const isAdmin = pathname.startsWith('/admin');
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navigation />
+        {!isAdmin && <Navigation />}
         <Toaster position="top-center" />
         {children}
         <Footer />
