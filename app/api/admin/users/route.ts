@@ -1,36 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-
-// Mock database
-let users = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    role: 'Admin',
-    status: 'Active',
-    lastLogin: '2024-02-20',
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    email: 'jane@example.com',
-    role: 'User',
-    status: 'Active',
-    lastLogin: '2024-02-19',
-  },
-  {
-    id: 3,
-    name: 'Mike Johnson',
-    email: 'mike@example.com',
-    role: 'User',
-    status: 'Inactive',
-    lastLogin: '2024-02-15',
-  },
-];
+import { connectToDatabase } from '@/app/lib/mongodb';
+import { ObjectId } from 'mongodb';
 
 // GET all users
 export async function GET() {
+  const { db } = await connectToDatabase();
+  const users = await db.collection('users').find({}).toArray();
   return NextResponse.json(users);
 }
 
@@ -40,7 +16,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { name, email, role } = body;
 
-    // Validate required fields
     if (!name || !email || !role) {
       return NextResponse.json(
         { error: 'Name, email, and role are required' },
@@ -48,7 +23,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -57,26 +31,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if email already exists
-    if (users.some(user => user.email === email)) {
+    const { db } = await connectToDatabase();
+    const existingUser = await db.collection('users').findOne({ email });
+    if (existingUser) {
       return NextResponse.json(
         { error: 'Email already exists' },
         { status: 400 }
       );
     }
 
-    // Create new user
     const newUser = {
-      id: users.length + 1,
       name,
       email,
       role,
       status: 'Active',
       lastLogin: new Date().toISOString().split('T')[0],
     };
-
-    users.push(newUser);
-    return NextResponse.json(newUser, { status: 201 });
+    const result = await db.collection('users').insertOne(newUser);
+    return NextResponse.json({ ...newUser, _id: result.insertedId }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to create user' },
@@ -91,7 +63,6 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { id, name, email, role, status } = body;
 
-    // Validate required fields
     if (!id || !name || !email || !role || !status) {
       return NextResponse.json(
         { error: 'All fields are required' },
@@ -99,32 +70,32 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Find and update user
-    const userIndex = users.findIndex(u => u.id === id);
-    if (userIndex === -1) {
+    const { db } = await connectToDatabase();
+    const userObjectId = new ObjectId(id);
+    const user = await db.collection('users').findOne({ _id: userObjectId });
+    if (!user) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
 
-    // Check if email is being changed and already exists
-    if (email !== users[userIndex].email && users.some(u => u.email === email)) {
-      return NextResponse.json(
-        { error: 'Email already exists' },
-        { status: 400 }
-      );
+    if (email !== user.email) {
+      const emailExists = await db.collection('users').findOne({ email });
+      if (emailExists) {
+        return NextResponse.json(
+          { error: 'Email already exists' },
+          { status: 400 }
+        );
+      }
     }
 
-    users[userIndex] = {
-      ...users[userIndex],
-      name,
-      email,
-      role,
-      status,
-    };
-
-    return NextResponse.json(users[userIndex]);
+    await db.collection('users').updateOne(
+      { _id: userObjectId },
+      { $set: { name, email, role, status } }
+    );
+    const updatedUser = await db.collection('users').findOne({ _id: userObjectId });
+    return NextResponse.json(updatedUser);
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to update user' },
@@ -137,24 +108,22 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const id = parseInt(searchParams.get('id') || '');
-
+    const id = searchParams.get('id');
     if (!id) {
       return NextResponse.json(
         { error: 'User ID is required' },
         { status: 400 }
       );
     }
-
-    const userIndex = users.findIndex(u => u.id === id);
-    if (userIndex === -1) {
+    const { db } = await connectToDatabase();
+    const userObjectId = new ObjectId(id);
+    const result = await db.collection('users').deleteOne({ _id: userObjectId });
+    if (result.deletedCount === 0) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
-
-    users = users.filter(u => u.id !== id);
     return NextResponse.json({ message: 'User deleted successfully' });
   } catch (error) {
     return NextResponse.json(

@@ -79,7 +79,7 @@ export default function AdminLayout({
                   Admin User
                 </p>
                 <p className="text-sm text-gray-500 truncate">
-                  admin@example.com
+                  shajib@gmail.com
                 </p>
               </div>
             </div>
