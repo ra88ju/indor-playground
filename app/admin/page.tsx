@@ -177,7 +177,7 @@ export default function AdminDashboard() {
           <div className="mt-6 flow-root">
             <ul role="list" className="-my-5 divide-y divide-gray-200">
               {activities.map((activity) => (
-                <li key={activity.id} className="py-4">
+                <li key={activity.id ?? `${activity.type}-${activity.description}-${activity.time}` } className="py-4">
                   <div className="flex items-center space-x-4">
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-gray-900">

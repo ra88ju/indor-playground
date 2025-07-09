@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { connectToDatabase } from '@/app/lib/mongodb';
 
 export async function POST(request: NextRequest) {
+  console.log('Booking API called');
   try {
     const body = await request.json();
+    console.log('Received body:', body);
     const { name, email, phone, sport, date, time, players, notes, paymentMethod } = body;
 
     // Validate required fields
@@ -31,32 +34,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Here you would typically:
-    // 1. Save booking to database
-    // 2. Send confirmation email
-    // 3. Process payment
-    // 4. Update availability
-    
-    console.log('Booking request:', { 
-      name, 
-      email, 
-      phone, 
-      sport, 
-      date, 
-      time, 
-      players, 
-      notes, 
-      paymentMethod 
-    });
+    // Save booking to MongoDB
+    const { db } = await connectToDatabase();
+    const booking = {
+      name,
+      email,
+      phone,
+      sport,
+      date,
+      time,
+      players,
+      notes,
+      paymentMethod,
+      createdAt: new Date(),
+    };
+    const result = await db.collection('bookings').insertOne(booking);
+    console.log('Booking inserted:', result.insertedId);
 
     return NextResponse.json(
-      { message: 'Booking request submitted successfully' },
+      { message: 'Booking request submitted successfully', bookingId: result.insertedId },
       { status: 200 }
     );
   } catch (error) {
     console.error('Error processing booking:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

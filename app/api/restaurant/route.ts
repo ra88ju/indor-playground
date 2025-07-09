@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { connectToDatabase } from '@/app/lib/mongodb';
 
 const restaurantSections = [
   {
@@ -129,35 +130,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Here you would typically:
-    // 1. Save order to database
-    // 2. Process payment
-    // 3. Send order to kitchen
-    // 4. Send confirmation email
-
-    console.log('Order received:', {
+    // Save order to MongoDB
+    const { db } = await connectToDatabase();
+    const order = {
       item: orderedItem,
       quantity,
-      specialInstructions
-    });
+      specialInstructions,
+      total: parseInt(orderedItem.price.replace('৳', '')) * quantity,
+      createdAt: new Date(),
+    };
+    const result = await db.collection('orders').insertOne(order);
 
     return NextResponse.json(
-      { 
+      {
         message: 'Order placed successfully',
-        orderId: Math.random().toString(36).substring(7),
-        orderDetails: {
-          item: orderedItem,
-          quantity,
-          specialInstructions,
-          total: parseInt(orderedItem.price.replace('৳', '')) * quantity
-        }
+        orderId: result.insertedId,
+        orderDetails: order
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Error processing order:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { connectToDatabase } from '@/app/lib/mongodb';
+import type { NextRequest } from 'next/server';
+import { ObjectId } from 'mongodb';
 
 interface TimeSlot {
   id: number;
@@ -12,35 +15,11 @@ interface TimeSlot {
   currentBookings: number;
 }
 
-// Mock data - replace with your database implementation
-let slots: TimeSlot[] = [
-  {
-    id: 1,
-    facilityId: 1,
-    startTime: '09:00',
-    endTime: '10:00',
-    dayOfWeek: 'Monday',
-    isAvailable: true,
-    price: 50,
-    maxBookings: 4,
-    currentBookings: 0
-  },
-  {
-    id: 2,
-    facilityId: 1,
-    startTime: '10:00',
-    endTime: '11:00',
-    dayOfWeek: 'Monday',
-    isAvailable: true,
-    price: 50,
-    maxBookings: 4,
-    currentBookings: 2
-  }
-];
-
 // GET /api/admin/slots
 export async function GET() {
   try {
+    const { db } = await connectToDatabase();
+    const slots = await db.collection('slots').find({}).toArray();
     return NextResponse.json(slots);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -51,7 +30,6 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-
     // Validate required fields
     const requiredFields = ['facilityId', 'startTime', 'endTime', 'dayOfWeek', 'price', 'maxBookings'];
     for (const field of requiredFields) {
@@ -62,7 +40,6 @@ export async function POST(request: Request) {
         );
       }
     }
-
     // Validate time format (HH:mm)
     const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timeRegex.test(data.startTime) || !timeRegex.test(data.endTime)) {
@@ -71,7 +48,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
     // Validate start time is before end time
     if (data.startTime >= data.endTime) {
       return NextResponse.json(
@@ -79,10 +55,8 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
     // Create new slot
-    const newSlot: TimeSlot = {
-      id: slots.length + 1,
+    const newSlot = {
       facilityId: data.facilityId,
       startTime: data.startTime,
       endTime: data.endTime,
@@ -90,11 +64,12 @@ export async function POST(request: Request) {
       isAvailable: true,
       price: data.price,
       maxBookings: data.maxBookings,
-      currentBookings: 0
+      currentBookings: 0,
+      createdAt: new Date(),
     };
-
-    slots.push(newSlot);
-    return NextResponse.json(newSlot, { status: 201 });
+    const { db } = await connectToDatabase();
+    const result = await db.collection('slots').insertOne(newSlot);
+    return NextResponse.json({ ...newSlot, _id: result.insertedId }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -104,55 +79,47 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const data = await request.json();
-
-    // Validate ID exists
-    if (!data.id) {
+    if (!data._id) {
       return NextResponse.json(
-        { error: 'Missing slot ID' },
+        { error: 'Missing slot ID (_id)' },
         { status: 400 }
       );
     }
-
-    // Find slot
-    const slotIndex = slots.findIndex(slot => slot.id === data.id);
-    if (slotIndex === -1) {
-      return NextResponse.json(
-        { error: 'Slot not found' },
-        { status: 404 }
-      );
-    }
-
+    const { db } = await connectToDatabase();
+    const { _id, ...updateData } = data;
     // Validate time format if provided
     const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
-    if (data.startTime && !timeRegex.test(data.startTime)) {
+    if (updateData.startTime && !timeRegex.test(updateData.startTime)) {
       return NextResponse.json(
         { error: 'Invalid start time format. Use HH:mm format (e.g., 09:00)' },
         { status: 400 }
       );
     }
-    if (data.endTime && !timeRegex.test(data.endTime)) {
+    if (updateData.endTime && !timeRegex.test(updateData.endTime)) {
       return NextResponse.json(
         { error: 'Invalid end time format. Use HH:mm format (e.g., 09:00)' },
         { status: 400 }
       );
     }
-
-    // Validate start time is before end time if both are provided
-    if (data.startTime && data.endTime && data.startTime >= data.endTime) {
+    if (updateData.startTime && updateData.endTime && updateData.startTime >= updateData.endTime) {
       return NextResponse.json(
         { error: 'Start time must be before end time' },
         { status: 400 }
       );
     }
-
-    // Update slot
-    slots[slotIndex] = {
-      ...slots[slotIndex],
-      ...data,
-      id: slots[slotIndex].id // Ensure ID doesn't change
-    };
-
-    return NextResponse.json(slots[slotIndex]);
+    const { ObjectId } = await import('mongodb');
+    const result = await db.collection('slots').findOneAndUpdate(
+      { _id: new ObjectId(_id) },
+      { $set: updateData },
+      { returnDocument: 'after' }
+    );
+    if (!result || !result.value) {
+      return NextResponse.json(
+        { error: 'Slot not found' },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(result.value);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -163,33 +130,28 @@ export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
-
     if (!id) {
       return NextResponse.json(
         { error: 'Missing slot ID' },
         { status: 400 }
       );
     }
-
-    const slotId = parseInt(id);
-    const slotIndex = slots.findIndex(slot => slot.id === slotId);
-
-    if (slotIndex === -1) {
+    const { db } = await connectToDatabase();
+    const { ObjectId } = await import('mongodb');
+    const slot = await db.collection('slots').findOne({ _id: new ObjectId(id) });
+    if (!slot) {
       return NextResponse.json(
         { error: 'Slot not found' },
         { status: 404 }
       );
     }
-
-    // Check if slot has current bookings
-    if (slots[slotIndex].currentBookings > 0) {
+    if (slot.currentBookings > 0) {
       return NextResponse.json(
         { error: 'Cannot delete slot with active bookings' },
         { status: 400 }
       );
     }
-
-    slots = slots.filter(slot => slot.id !== slotId);
+    await db.collection('slots').deleteOne({ _id: new ObjectId(id) });
     return NextResponse.json({ message: 'Slot deleted successfully' });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

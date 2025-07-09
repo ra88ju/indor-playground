@@ -118,7 +118,7 @@ function slugify(str: string) {
 }
 
 // MenuCard component for professional, dynamic menu cards
-function MenuCard({ item }: { item: { name: string; description: string; price: string; image: string } }) {
+function MenuCard({ item, setSelectedMenuItem, setOrderModalOpen }: { item: { name: string; description: string; price: string; image: string }, setSelectedMenuItem: (item: any) => void, setOrderModalOpen: (open: boolean) => void }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
 
@@ -166,6 +166,10 @@ function MenuCard({ item }: { item: { name: string; description: string; price: 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              setSelectedMenuItem(item);
+              setOrderModalOpen(true);
+            }}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md hover:shadow-lg"
           >
             Order Now
@@ -181,6 +185,9 @@ export default function RestaurantPage() {
 
   // Dynamic background gradient based on time of day
   const [bgGradient, setBgGradient] = useState("bg-gradient-to-b from-blue-50 to-gray-50");
+
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
+  const [selectedMenuItem, setSelectedMenuItem] = useState<MenuItem | null>(null);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -337,7 +344,7 @@ export default function RestaurantPage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {section.items.map((item) => (
-                      <MenuCard key={item.name} item={item} />
+                      <MenuCard key={item.name} item={item} setSelectedMenuItem={setSelectedMenuItem} setOrderModalOpen={setOrderModalOpen} />
                     ))}
                   </div>
                 </motion.div>
@@ -360,6 +367,76 @@ export default function RestaurantPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
           </svg>
         </motion.button>
+
+        {/* Order Modal */}
+        {orderModalOpen && selectedMenuItem && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white text-black rounded-lg p-8 w-full max-w-md">
+              <h2 className="text-xl font-bold mb-4">Order: {selectedMenuItem && 'name' in selectedMenuItem ? selectedMenuItem.name : ''}</h2>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const form = e.target as HTMLFormElement;
+                  const formData = new FormData(form);
+                  const quantity = Number(formData.get('quantity'));
+                  const specialInstructions = formData.get('specialInstructions');
+                  const res = await fetch('/api/restaurant', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      itemId: (selectedMenuItem as any)._id || (selectedMenuItem as any).id,
+                      quantity,
+                      specialInstructions,
+                    }),
+                  });
+                  const result = await res.json();
+                  if (res.ok) {
+                    alert('Order placed successfully!');
+                    setOrderModalOpen(false);
+                    setSelectedMenuItem(null);
+                  } else {
+                    alert(result.error || 'Order failed');
+                  }
+                }}
+              >
+                <div className="mb-4">
+                  <label className="block mb-1 font-medium">Quantity</label>
+                  <input
+                    name="quantity"
+                    type="number"
+                    min="1"
+                    defaultValue="1"
+                    className="w-full border rounded px-3 py-2"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-1 font-medium">Special Instructions</label>
+                  <textarea
+                    name="specialInstructions"
+                    className="w-full border rounded px-3 py-2"
+                    rows={2}
+                  />
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    type="button"
+                    onClick={() => setOrderModalOpen(false)}
+                    className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  >
+                    Place Order
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );

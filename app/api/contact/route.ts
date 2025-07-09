@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { connectToDatabase } from '@/app/lib/mongodb';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,13 +15,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Here you would typically:
-    // 1. Save to database
-    // 2. Send email notification
-    // 3. Perform any other necessary actions
-    
-    // For now, we'll just log the data and return success
-    console.log('Contact form submission:', { name, email, subject, message });
+    // Save to MongoDB
+    const { db } = await connectToDatabase();
+    const contact = {
+      name,
+      email,
+      subject,
+      message,
+      createdAt: new Date(),
+    };
+    await db.collection('contacts').insertOne(contact);
 
     return NextResponse.json(
       { message: 'Message sent successfully' },
@@ -29,7 +33,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error processing contact form:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

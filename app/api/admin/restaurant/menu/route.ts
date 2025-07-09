@@ -1,37 +1,33 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../../lib/prisma';
+import { connectToDatabase } from '@/app/lib/mongodb';
+import type { NextRequest } from 'next/server';
+import { ObjectId } from 'mongodb';
 
 export async function GET() {
   try {
-    const menuItems = await prisma.menuItem.findMany({
-      orderBy: {
-        category: 'asc',
-      },
-    });
+    const { db } = await connectToDatabase();
+    const menuItems = await db.collection('menuItems').find({}).sort({ category: 1 }).toArray();
     return NextResponse.json(menuItems);
   } catch (error: any) {
     console.error('Error fetching menu items:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch menu items' },
+      { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { name, description, price, category, available } = body;
 
-    // Validate required fields
     if (!name || !description || price === undefined || !category) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
-
-    // Validate price
     if (typeof price !== 'number' || price < 0) {
       return NextResponse.json(
         { error: 'Invalid price' },
@@ -39,40 +35,38 @@ export async function POST(request: Request) {
       );
     }
 
-    const menuItem = await prisma.menuItem.create({
-      data: {
-        name,
-        description,
-        price,
-        category,
-        available: available ?? true,
-      },
-    });
+    const { db } = await connectToDatabase();
+    const menuItem = {
+      name,
+      description,
+      price,
+      category,
+      available: available ?? true,
+      createdAt: new Date(),
+    };
+    const result = await db.collection('menuItems').insertOne(menuItem);
 
-    return NextResponse.json(menuItem, { status: 201 });
+    return NextResponse.json({ ...menuItem, _id: result.insertedId }, { status: 201 });
   } catch (error: any) {
     console.error('Error creating menu item:', error);
     return NextResponse.json(
-      { error: 'Failed to create menu item' },
+      { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
 }
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { id, name, description, price, category, available } = body;
+    const { _id, name, description, price, category, available } = body;
 
-    // Validate required fields
-    if (!id || !name || !description || price === undefined || !category) {
+    if (!_id || !name || !description || price === undefined || !category) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
-
-    // Validate price
     if (typeof price !== 'number' || price < 0) {
       return NextResponse.json(
         { error: 'Invalid price' },
@@ -80,38 +74,34 @@ export async function PUT(request: Request) {
       );
     }
 
-    const menuItem = await prisma.menuItem.update({
-      where: { id },
-      data: {
-        name,
-        description,
-        price,
-        category,
-        available: available ?? true,
-      },
-    });
+    const { db } = await connectToDatabase();
+    const result = await db.collection('menuItems').findOneAndUpdate(
+      { _id: new ObjectId(_id) },
+      { $set: { name, description, price, category, available: available ?? true } },
+      { returnDocument: 'after' }
+    );
 
-    return NextResponse.json(menuItem);
-  } catch (error: any) {
-    if (error.code === 'P2025') {
+    if (!result || !result.value) {
       return NextResponse.json(
         { error: 'Menu item not found' },
         { status: 404 }
       );
     }
+
+    return NextResponse.json(result.value);
+  } catch (error: any) {
     console.error('Error updating menu item:', error);
     return NextResponse.json(
-      { error: 'Failed to update menu item' },
+      { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const id = parseInt(searchParams.get('id') || '');
-
+    const id = searchParams.get('id');
     if (!id) {
       return NextResponse.json(
         { error: 'Menu item ID is required' },
@@ -119,21 +109,21 @@ export async function DELETE(request: Request) {
       );
     }
 
-    await prisma.menuItem.delete({
-      where: { id },
-    });
+    const { db } = await connectToDatabase();
+    const result = await db.collection('menuItems').deleteOne({ _id: new ObjectId(id) });
 
-    return NextResponse.json({ message: 'Menu item deleted successfully' });
-  } catch (error: any) {
-    if (error.code === 'P2025') {
+    if (result.deletedCount === 0) {
       return NextResponse.json(
         { error: 'Menu item not found' },
         { status: 404 }
       );
     }
+
+    return NextResponse.json({ message: 'Menu item deleted successfully' });
+  } catch (error: any) {
     console.error('Error deleting menu item:', error);
     return NextResponse.json(
-      { error: 'Failed to delete menu item' },
+      { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

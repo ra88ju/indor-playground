@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {!isAdmin && <Navigation />}
+        { !isAdmin && <Navigation />}
         <Toaster position="top-center" />
         {children}
         <Footer />

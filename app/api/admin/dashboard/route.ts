@@ -1,90 +1,98 @@
 import { NextResponse } from 'next/server';
-
-// Mock data - Replace with actual database queries
-const getDashboardStats = async () => {
-  return {
-    totalUsers: 2543,
-    activeBookings: 45,
-    facilities: 12,
-    revenue: 12345,
-    changes: {
-      users: '+12.3%',
-      bookings: '+5.4%',
-      facilities: '+2',
-      revenue: '+8.2%',
-    },
-  };
-};
-
-const getRecentActivities = async () => {
-  return [
-    {
-      id: 1,
-      type: 'booking',
-      description: 'New booking for Indoor Football',
-      time: '5 minutes ago',
-      userId: 'user123',
-      entityId: 'booking123',
-    },
-    {
-      id: 2,
-      type: 'user',
-      description: 'New user registration',
-      time: '10 minutes ago',
-      userId: 'user124',
-      entityId: null,
-    },
-    {
-      id: 3,
-      type: 'payment',
-      description: 'Payment received for Event Booking',
-      time: '15 minutes ago',
-      userId: 'user125',
-      entityId: 'payment123',
-    },
-    {
-      id: 4,
-      type: 'facility',
-      description: 'Facility status updated',
-      time: '20 minutes ago',
-      userId: 'user126',
-      entityId: 'facility123',
-    },
-  ];
-};
+import type { NextRequest } from 'next/server';
+import { connectToDatabase } from '@/app/lib/mongodb';
 
 export async function GET() {
   try {
-    const [stats, activities] = await Promise.all([
-      getDashboardStats(),
-      getRecentActivities(),
-    ]);
+    const { db } = await connectToDatabase();
+
+    // Fetch total users
+    const totalUsers = await db.collection('users').countDocuments();
+    // Fetch active bookings (example: all bookings, or filter by status if available)
+    const activeBookings = await db.collection('bookings').countDocuments();
+    // Fetch total facilities
+    const facilities = await db.collection('facilities').countDocuments();
+    // Calculate revenue (sum of all order totals)
+    const orders = await db.collection('orders').find({}).toArray();
+    const revenue = orders.reduce((sum: number, order: any) => {
+      const total = Number(order.total);
+      return sum + (isNaN(total) ? 0 : total);
+    }, 0);
+
+    // Optionally, fetch recent activities (last 5 bookings, users, or orders)
+    const recentBookings = await db.collection('bookings')
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .toArray();
+    const recentUsers = await db.collection('users')
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .toArray();
+    const recentOrders = await db.collection('orders')
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .toArray();
+
+    // Combine recent activities (example: just bookings, or merge all types)
+    const recentActivities = [
+      ...recentBookings.map(b => ({
+        type: 'booking',
+        description: `Booking for ${b.sport || 'facility'}`,
+        time: b.createdAt,
+        user: b.name || b.email,
+      })),
+      ...recentUsers.map(u => ({
+        type: 'user',
+        description: `New user: ${u.name || u.email}`,
+        time: u.createdAt,
+        user: u.name || u.email,
+      })),
+      ...recentOrders.map(o => ({
+        type: 'order',
+        description: `Order placed: ${o.item?.name || 'item'}`,
+        time: o.createdAt,
+        user: o.customerName || o._id,
+      })),
+    ].sort((a, b) => {
+      const aTime = a.time ? new Date(a.time).getTime() : 0;
+      const bTime = b.time ? new Date(b.time).getTime() : 0;
+      return bTime - aTime;
+    }).slice(0, 5);
 
     return NextResponse.json({
       stats: {
-        totalUsers: {
-          value: stats.totalUsers,
-          change: stats.changes.users,
-        },
-        activeBookings: {
-          value: stats.activeBookings,
-          change: stats.changes.bookings,
-        },
-        facilities: {
-          value: stats.facilities,
-          change: stats.changes.facilities,
-        },
-        revenue: {
-          value: stats.revenue,
-          change: stats.changes.revenue,
-        },
+        totalUsers: { value: totalUsers, change: '' },
+        activeBookings: { value: activeBookings, change: '' },
+        facilities: { value: facilities, change: '' },
+        revenue: { value: revenue, change: '' },
       },
-      recentActivities: activities,
-    });
-  } catch (error: any) {
+      recentActivities,
+    }, { status: 200 });
+  } catch (error) {
     console.error('Error fetching dashboard data:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch dashboard data' },
+      { error: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { db } = await connectToDatabase();
+    const result = await db.collection('COLLECTION_NAME').insertOne(body);
+    return NextResponse.json(
+      { message: 'Created successfully', id: result.insertedId },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error('Error creating data:', error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

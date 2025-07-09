@@ -260,7 +260,7 @@ export default function AdminRestaurantPage() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {menuItems.map((item) => (
               <div
-                key={item.id}
+                key={item.id ?? item.name}
                 className="relative flex flex-col overflow-hidden rounded-lg bg-white shadow transition hover:shadow-md"
               >
                 <div className="flex-1 p-6">
@@ -361,8 +361,8 @@ export default function AdminRestaurantPage() {
                     </td>
                     <td className="px-3 py-4 text-sm text-gray-500">
                       <ul className="list-disc list-inside">
-                        {order.items.map((item, index) => (
-                          <li key={index}>
+                        {order.items.map((item, idx) => (
+                          <li key={item.menuItemId ?? idx}>
                             {item.quantity}x {item.name} (${item.price.toFixed(2)})
                           </li>
                         ))}
