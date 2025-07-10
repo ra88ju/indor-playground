@@ -44,7 +44,14 @@ export default function BookingPage() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      const contentType = response.headers.get('content-type');
+      let result;
+      if (contentType && contentType.includes('application/json')) {
+        result = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(text || 'Failed to submit booking request');
+      }
 
       if (!response.ok) {
         throw new Error(result.error || 'Failed to submit booking request');
